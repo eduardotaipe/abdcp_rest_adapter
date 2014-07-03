@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     # Dependencies
     'south',
     # Project
+    'operators'
 )
 
 MIDDLEWARE_CLASSES = (
