@@ -42,7 +42,8 @@ INSTALLED_APPS = (
     # Dependencies
     'south',
     # Project
-    'operators'
+    'operators',
+    'abdcp_messages'
 )
 
 MIDDLEWARE_CLASSES = (
