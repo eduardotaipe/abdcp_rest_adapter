@@ -2,5 +2,6 @@ Django==1.6.5
 MySQL-python==1.2.5
 South==1.0
 argparse==1.2.1
+-e git+https://github.com/gnrfan/django-sequence-field.git@7b5975f26dd33a11b6588a40abfd510c3867115f#egg=django_sequence_field-master
 requests==2.3.0
 wsgiref==0.1.2
