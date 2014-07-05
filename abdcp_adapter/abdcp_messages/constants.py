@@ -18,3 +18,31 @@ ABDCP_PROCESS_CHOICES = Enumeration([
     ('05', 'CP', strings.ABDCP_PROCESS_05_CP)
 ])
 
+ABDCP_MESSAGE_TYPE_CHOICES = Enumeration([
+    ('CP', 'CP', strings.ABDCP_MESSAGE_TYPE_CP),
+    ('ANCP', 'ANCP', strings.ABDCP_MESSAGE_TYPE_ANCP),
+    ('CPRABD', 'CPRABD', strings.ABDCP_MESSAGE_TYPE_CPRABD),
+    ('SPC', 'SPC', strings.ABDCP_MESSAGE_TYPE_SPC),
+    ('CPOCC', 'CPOCC', strings.ABDCP_MESSAGE_TYPE_CPOCC),
+    ('CPAC', 'CPAC', strings.ABDCP_MESSAGE_TYPE_CPAC),
+    ('CPPR', 'CPPR', strings.ABDCP_MESSAGE_TYPE_CPPR),
+    ('SP', 'SP', strings.ABDCP_MESSAGE_TYPE_SP),
+    ('ANS', 'ANS', strings.ABDCP_MESSAGE_TYPE_ANS),
+    ('ESC', 'ESC', strings.ABDCP_MESSAGE_TYPE_ESC),
+    ('OCC', 'OCC', strings.ABDCP_MESSAGE_TYPE_OCC),
+    ('SAC', 'SAC', strings.ABDCP_MESSAGE_TYPE_SAC),
+    ('APD', 'APD', strings.ABDCP_MESSAGE_TYPE_APD),
+    ('APDC', 'APDC', strings.ABDCP_MESSAGE_TYPE_APDC),
+    ('RABDCP', 'RABDCP', strings.ABDCP_MESSAGE_TYPE_RABDCP),
+    ('SPR', 'SPR', strings.ABDCP_MESSAGE_TYPE_SPR),
+    ('CPSPR', 'CPSPR', strings.ABDCP_MESSAGE_TYPE_CPSPR),
+    ('CNPF', 'CNPF', strings.ABDCP_MESSAGE_TYPE_CNPF),
+    ('PP', 'PP', strings.ABDCP_MESSAGE_TYPE_PP),
+    ('FLEP', 'FLEP', strings.ABDCP_MESSAGE_TYPE_FLEP),
+    ('PEP', 'PEP', strings.ABDCP_MESSAGE_TYPE_PEP),
+    ('SR', 'SR', strings.ABDCP_MESSAGE_TYPE_SR),
+    ('AR', 'AR', strings.ABDCP_MESSAGE_TYPE_AR),
+    ('DR', 'DR', strings.ABDCP_MESSAGE_TYPE_DR),
+    ('NI', 'NI', strings.ABDCP_MESSAGE_TYPE_NI),
+    ('NE', 'NE', strings.ABDCP_MESSAGE_TYPE_NE)
+])

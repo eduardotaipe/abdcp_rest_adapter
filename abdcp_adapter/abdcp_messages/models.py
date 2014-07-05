@@ -51,6 +51,14 @@ class ABDCPMessage(models.Model):
         null=True
     )
 
+    message_type = models.TextField(
+        verbose_name=strings.ABDCP_MESSAGE_MESSAGE_TYPE,
+        choices=constants.ABDCP_MESSAGE_TYPE_CHOICES,
+        max_length=16,
+        blank=True,
+        null=True
+    )
+
     created = models.DateTimeField(
         verbose_name=strings.ABDCP_MESSAGE_CREATED,
         auto_now_add=True
