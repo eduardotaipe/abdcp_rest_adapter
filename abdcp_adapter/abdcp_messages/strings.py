@@ -85,3 +85,28 @@ ABDCP_MESSAGE_TYPE_AR = _(u'Retorno de número aceptado')
 ABDCP_MESSAGE_TYPE_DR = _(u'Denegación de retorno')
 ABDCP_MESSAGE_TYPE_NI = _(u'No integridad')
 ABDCP_MESSAGE_TYPE_NE = _(u'Notificación de error')
+
+# Validators
+
+MESSAGE_ID_VALIDATION_ERROR = _(
+    u'The value \'%(message_id)s\' does not seem to be '
+    u'a valid message id'
+)
+
+TRANSACTION_ID_VALIDATION_ERROR = _(
+    u'The value \'%(transaction_id)s\' does not seem to be '
+    u'a valid transaction id'
+)
+
+SENDER_CODE_VALIDATION_ERROR = _(
+    u'The value \'%(code)s\' does not seem to be a valid sender code'
+)
+
+RECIPIENT_CODE_VALIDATION_ERROR = _(
+    u'The value \'%(code)s\' does not seem to be a valid recipient code'
+)
+
+STATED_CREATION_DATE_VALIDATION_ERROR = _(
+    u'The value \'%(date)s\' does not seem to be a valid ABDCP date '
+    u'in the \'%%Y%%m%%d%%H%%M%%S\' format'
+)
