@@ -1,0 +1,602 @@
+<!-- edited with XMLSpy v2011 (http://www.altova.com) by FEDOR POSTIGO (TELCORDIA TECHNOLOGIES) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:annotation>
+		<xsd:documentation xml:lang="es">XML Schema para Mensajes ABDCP</xsd:documentation>
+	</xsd:annotation>
+	<!-- >>>>>>>>>>>>>>>>>>>>>> ELEMENTO RAIZ <<<<<<<<<<<<<<<<<<<<<<< -->
+	<xsd:element name="MensajeABDCP">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="CabeceraMensaje" type="TipoCabeceraMensaje" maxOccurs="1"/>
+				<xsd:element name="CuerpoMensaje" type="TipoCuerpoMensaje" maxOccurs="1"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- >>>>>>>>>>>>>>>>>>>>>> TIPOS SIMPLES <<<<<<<<<<<<<<<<<<<<<<< -->
+	<xsd:simpleType name="TipoIdentificadorMensaje">
+		<xsd:annotation>
+			<xsd:documentation>
+				Formato: OO + AAAA + MM + DD + CCCCCCC
+				OO: codigo del operador (2 digitos)
+				AAAA: anyo (4 digitos)
+				MM: mes (2 digitos)
+				DD: dia (2 digitos)
+				CCCCCCC: secuencia (7 digitos).
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="17"/>
+			<xsd:pattern value="[0-9]*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoIdentificadorSolicitud">
+		<xsd:annotation>
+			<xsd:documentation>
+				Formato: OO + AAAA + MM + DD + TI + CCCCC
+				OO: codigo del operador (2 digitos)
+				AAAA: anyo (4 digitos)
+				MM: mes (2 digitos)
+				DD: dia (2 digitos)
+				TI: tipo de proceso (2 digitos)
+				CCCCC: secuencia (5 digitos).
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="17"/>
+			<xsd:pattern value="[0-9]*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoCodigoOperador">
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="2"/>
+			<xsd:pattern value="[0-9]*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoFechaHora">
+		<xsd:annotation>
+			<xsd:documentation>
+				Formato: AAAA + MM + DD + HH + MI+ SS
+				AAAA: anyo (4 digitos)
+				MM: mes (2 digitos)
+				DD: dia (2 digitos)
+				HH: hora (2 digitos)
+				MI: minutos (2 digitos)
+				SS: segundos (2 digitos)
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="14"/>
+			<xsd:pattern value="[0-9]*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoFecha">
+		<xsd:annotation>
+			<xsd:documentation>
+				Formato: AAAA + MM + DD
+				AAAA: anyo (4 digitos)
+				MM: mes (2 digitos)
+				DD: dia (2 digitos)
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="8"/>
+			<xsd:pattern value="[0-9]*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoHora">
+		<xsd:annotation>
+			<xsd:documentation>
+				Formato: HH + MI+ SS
+				HH: Hora (4 digitos)
+				MI: minutos (2 digitos)
+				SS: segundos (2 digitos)
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="6"/>
+			<xsd:pattern value="[0-9]*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoObservaciones">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="80"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoNumeroSecuencial">
+		<xsd:annotation>
+			<xsd:documentation>
+				Formato: OO + AAAA + MM + DD + TI + CCCCC
+				OO: codigo del operador (2 digitos)
+				AAAA: anyo (4 digitos)
+				MM: mes (2 digitos)
+				DD: dia (2 digitos)
+				TI: tipo de proceso (2 digitos)
+				CCCCC: secuencia (5 digitos).
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="17"/>
+			<xsd:pattern value="[0-9]*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoIdentificadorProceso">
+		<xsd:annotation>
+			<xsd:documentation>
+				El tipo IdentificadorProceso se utiliza en la cabecera
+				para identificar el proceso al que está asociado el mensaje,
+				por lo tanto, en ocasiones contendrá el número secuencial generado
+				por el concesionario y otras veces contendrá el número de proceso
+				asignado por el ABDCP
+				Formato: OO + AAAA + MM + DD + TI + CCCCC
+				OO: codigo del operador (2 digitos)
+				AAAA: anyo (4 digitos)
+				MM: mes (2 digitos)
+				DD: dia (2 digitos)
+				TI: tipo de proceso (2 digitos)
+				CCCCC: secuencia (5 digitos).
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="17"/>
+			<xsd:pattern value="[0-9]*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoTipoDocumentoIdentidad">
+		<xsd:annotation>
+			<xsd:documentation>
+				El tipo TipoDocumentoIdentidad se utiliza para conocer
+				la documentación oficial presentada para la tramitación
+				de la solicitud por parte del usuario.
+				Valores:
+					01: DNI
+					02: Carnet de extranjería
+					03: Partida de nacimiento
+					04: Pasaporte
+					05: Carné de identidad personal
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="2"/>
+			<xsd:pattern value="01|02|03|04|05"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoNumeroDocumentoIdentidad">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="15"/>
+			<xsd:pattern value="[A-Za-z0-9]*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoPortabilidad">
+		<xsd:annotation>
+			<xsd:documentation>
+				01: Prepago
+				02: Pospago
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="2"/>
+			<xsd:pattern value="01|02"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoNombreContacto">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="80"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoTelefonoContacto">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="12"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoFaxContacto">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="12"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoEmailContacto">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="80"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoCantidad">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[0-9]*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoCodMensaje">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="2"/>
+			<xsd:maxLength value="6"/>
+			<xsd:pattern value="SP|NI|ANS|RABDCP|ESC|OCC|SAC|SPR|PP|CNPF|FLEP|PEP|SR|DR|AR|CP|ANCP|CPRABD|ECPC|CPOCC|CPAC|CPPR|CPSPR|APD|APDC|NE"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoNumero">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="12"/>
+			<xsd:pattern value="[0-9]*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoCausaNoIntegridad">
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="10"/>
+			<xsd:pattern value="[A-Za-z0-9]*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoCausaRechazoSolicitud">
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="10"/>
+			<xsd:pattern value="[A-Za-z0-9]*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoCausaRechazoRetorno">
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="10"/>
+			<xsd:pattern value="[A-Za-z0-9]*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoCausaObjecion">
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="10"/>
+			<xsd:pattern value="[A-Za-z0-9]*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoMotivoRetorno">
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="2"/>
+			<xsd:pattern value="01|02"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoDocumentoOpcional">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="0"/>
+			<xsd:maxLength value="21"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoServicio">
+		<xsd:annotation>
+			<xsd:documentation>
+				1: Móvil
+				2: Fijo
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="1"/>
+			<xsd:pattern value="1|2"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoCliente">
+		<xsd:annotation>
+			<xsd:documentation>
+				1: Especial
+				2: No especial
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="1"/>
+			<xsd:pattern value="1|2"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoEntidadPago">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="25"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoNumeroOperacionPago">
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="12"/>
+			<xsd:pattern value="[0-9]*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoMonto">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="10"/>
+			<xsd:pattern value="[1-9][0-9]*|[1-9][0-9]*[.][0-9]{1,2}"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoMoneda">
+		<xsd:annotation>
+			<xsd:documentation>
+				01: Soles
+				02: Dolares
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="2"/>
+			<xsd:pattern value="01|02"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TipoCodigoError">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="10"/>
+			<xsd:pattern value="[A-Za-z0-9]*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="Len200Str">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="200"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- >>>>>>>>>>>>>> COMPLEX TYPES <<<<<<< <<<<<<< -->
+	<xsd:complexType name="TipoRangoNumeracion">
+		<xsd:sequence>
+			<xsd:element name="InicioRango" type="TipoNumero"/>
+			<xsd:element name="FinalRango" type="TipoNumero" minOccurs="0"/>
+			<xsd:element name="TipoPortabilidad" type="TipoPortabilidad"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TipoListaRangosNumeracion">
+		<xsd:sequence maxOccurs="100">
+			<xsd:element name="RangoNumeracion" type="TipoRangoNumeracion"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- >>>>>>>>>>>>>> MESSAGES TYPES <<<<<<< <<<<<<< -->
+	<xsd:complexType name="TipoCabeceraMensaje">
+		<xsd:sequence>
+			<xsd:element name="IdentificadorMensaje" type="TipoIdentificadorMensaje"/>
+			<xsd:element name="Remitente" type="TipoCodigoOperador"/>
+			<xsd:element name="Destinatario" type="TipoCodigoOperador"/>
+			<xsd:element name="FechaCreacionMensaje" type="TipoFechaHora" minOccurs="0"/>
+			<xsd:element name="IdentificadorProceso" type="TipoIdentificadorProceso"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TipoCuerpoMensaje">
+		<xsd:annotation>
+			<xsd:documentation>
+				Solicitud de Portabilidad SP
+				Mensaje No Integridad NI
+				Asignación de número de solicitud ANS
+				Rechazada por el ABDCP RABDCP
+				Envío de solicitud al cedente ESC
+				Objeción del concesionario cedente OCC
+				Solicitud aceptada por el cedente SAC
+				Solicitud procedente SPR
+				Programacion portabilidad PP
+				Cancelación por no programación de fecha CNPF
+				Fuera del límite para ejecutar portabilidad FLEP
+				Programada para ejecutar portabilidad PEP
+				Solicitud de Retorno SR
+				Denegación de Retorno DR
+				Aceptación de Retorno AR
+				Consulta Previa CP
+				Asignación de Número de Consulta Previa ANCP
+				Consulta Previa Rechazada por el ABDCP CPRABD
+				Envío de Consulta Previa al Cedente ECPC
+				Consulta Previa Objeción del Concesionario Cedente CPOCC
+				Consulta Previa Aceptada por el Cedente CPAC
+				Consulta Previa Procedente CPPR
+				Solicitud Procedente por Consulta Previa Procedente CPSPR
+				Acreditación Pago Deuda APD
+				Acreditación Pago Deuda al Cedente APDC
+				Notificación de Error NE
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="SolicitudPortabilidad" type="TipoSolicitudPortabilidad"/>
+			<!-- SP -->
+			<xsd:element name="NoIntegridad" type="TipoNoIntegridad"/>
+			<!-- NI -->
+			<xsd:element name="AsignacionNumeroSolicitud" type="TipoAsignacionNumeroSolicitud"/>
+			<!-- ANS -->
+			<xsd:element name="RechazadaABDCP" type="TipoRechazadaABDCP"/>
+			<!-- RABDCP -->
+			<xsd:element name="EnvioSolicitudCedente" type="TipoEnvioSolicitudCedente"/>
+			<!-- ESC -->
+			<xsd:element name="ObjecionConcesionarioCedente" type="TipoObjecionConcesionarioCedente"/>
+			<!-- OCC -->
+			<xsd:element name="SolicitudAceptadaCedente" type="TipoSolicitudAceptadaCedente"/>
+			<!-- SAC -->
+			<xsd:element name="SolicitudProcedente" type="TipoSolicitudProcedente"/>
+			<!-- SPR -->
+			<xsd:element name="ProgramacionPortabilidad" type="TipoProgramacionPortabilidad"/>
+			<!-- PP -->
+			<xsd:element name="CancelacionNoProgramacionFecha" type="TipoCancelacionNoProgramacionFecha"/>
+			<!-- CNPF -->
+			<xsd:element name="FueraLimiteEjecutarPortabilidad" type="TipoFueraLimiteEjecutarPortabilidad"/>
+			<!-- FLEP -->
+			<xsd:element name="ProgramadaEjecutarPortabilidad" type="TipoProgramadaEjecutarPortabilidad"/>
+			<!-- PEP -->
+			<xsd:element name="SolicitudRetorno" type="TipoSolicitudRetorno"/>
+			<!-- SR -->
+			<xsd:element name="DenegacionRetorno" type="TipoDenegacionRetorno"/>
+			<!-- DR -->
+			<xsd:element name="AceptacionRetorno" type="TipoAceptacionRetorno"/>
+			<!-- AR -->
+			<xsd:element name="ConsultaPrevia" type="TipoSolicitudPortabilidad"/>
+			<!-- CP -->
+			<xsd:element name="AsignacionNumeroConsultaPrevia" type="TipoAsignacionNumeroSolicitud"/>
+			<!-- ANCP -->
+			<xsd:element name="ConsultaPreviaRechazadaABDCP" type="TipoRechazadaABDCP"/>
+			<!-- CPRABD -->
+			<xsd:element name="ConsultaPreviaEnvioCedente" type="TipoEnvioSolicitudCedente"/>
+			<!-- ECPC -->
+			<xsd:element name="ConsultaPreviaObjecionConcesionarioCedente" type="TipoObjecionConcesionarioCedente"/>
+			<!-- CPOCC -->
+			<xsd:element name="ConsultaPreviaAceptadaCedente" type="TipoSolicitudAceptadaCedente"/>
+			<!-- CPAC -->
+			<xsd:element name="ConsultaPreviaProcedente" type="TipoSolicitudProcedente"/>
+			<!-- CPPR -->
+			<xsd:element name="SolicitudProcedenteConsultaPreviaProcedente" type="TipoSolicitudProcedente"/>
+			<!-- CPSPR -->
+			<xsd:element name="AcreditacionPagoDeuda" type="TipoAcreditacionPagoDeuda"/>
+			<!-- APD -->
+			<xsd:element name="AcreditacionPagoDeudaCedente" type="TipoAcreditacionPagoDeuda"/>
+			<!-- APDC -->
+			<xsd:element name="NotificacionError" type="TipoNotificacionError"/>
+			<!-- NE -->
+		</xsd:choice>
+		<xsd:attribute name="IdMensaje" type="TipoCodMensaje" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="TipoSolicitudPortabilidad">
+		<xsd:sequence>
+			<xsd:element name="CodigoReceptor" type="TipoCodigoOperador"/>
+			<xsd:element name="CodigoCedente" type="TipoCodigoOperador"/>
+			<xsd:element name="TipoDocumentoIdentidad" type="TipoTipoDocumentoIdentidad"/>
+			<xsd:element name="NumeroDocumentoIdentidad" type="TipoNumeroDocumentoIdentidad"/>
+			<xsd:element name="CantidadNumeraciones" type="TipoCantidad"/>
+			<xsd:element name="NumeracionSolicitada" type="TipoListaRangosNumeracion"/>
+			<xsd:element name="Observaciones" type="TipoObservaciones"/>
+			<xsd:element name="NombreContacto" type="TipoNombreContacto" minOccurs="0"/>
+			<xsd:element name="EmailContacto" type="TipoEmailContacto" minOccurs="0"/>
+			<xsd:element name="TelefonoContacto" type="TipoTelefonoContacto" minOccurs="0"/>
+			<xsd:element name="FaxContacto" type="TipoFaxContacto" minOccurs="0"/>
+			<xsd:element name="TipoServicio" type="TipoServicio"/>
+			<xsd:element name="Cliente" type="TipoCliente" minOccurs="0"/>
+			<xsd:element name="NumeroConsultaPrevia" type="TipoIdentificadorSolicitud" minOccurs="0"/>
+		</xsd:sequence>
+		<!-- SP -->
+	</xsd:complexType>
+	<xsd:complexType name="TipoNoIntegridad">
+		<xsd:sequence>
+			<xsd:element name="NumeroSecuencialSolicitud" type="TipoIdentificadorProceso"/>
+			<xsd:element name="IdentificadorMensajeErroneo" type="TipoIdentificadorMensaje"/>
+			<xsd:element name="CausaNoIntegridad" type="TipoCausaNoIntegridad"/>
+			<xsd:element name="FechaRecepcionMensajeAnterior" type="TipoFechaHora"/>
+		</xsd:sequence>
+		<!-- NI -->
+	</xsd:complexType>
+	<xsd:complexType name="TipoAsignacionNumeroSolicitud">
+		<xsd:sequence>
+			<xsd:element name="IdentificacionSolicitud" type="TipoIdentificadorSolicitud"/>
+			<xsd:element name="FechaRecepcionMensajeAnterior" type="TipoFechaHora"/>
+			<xsd:element name="FechaReferenciaABDCP" type="TipoFechaHora"/>
+			<xsd:element name="Numeracion" type="TipoNumero"/>
+		</xsd:sequence>
+		<!-- ANS / ANCP -->
+	</xsd:complexType>
+	<xsd:complexType name="TipoRechazadaABDCP">
+		<xsd:sequence>
+			<xsd:element name="IdentificacionSolicitud" type="TipoIdentificadorSolicitud"/>
+			<xsd:element name="CausaRechazo" type="TipoCausaRechazoSolicitud"/>
+			<xsd:element name="Numeracion" type="TipoNumero"/>
+			<xsd:element name="FechaVencimiento" type="TipoFecha" minOccurs="0"/>
+			<xsd:element name="Monto" type="TipoMonto" minOccurs="0"/>
+			<xsd:element name="Moneda" type="TipoMoneda" minOccurs="0"/>
+		</xsd:sequence>
+		<!-- RABDCP / CPRABD-->
+	</xsd:complexType>
+	<xsd:complexType name="TipoEnvioSolicitudCedente">
+		<xsd:sequence>
+			<xsd:element name="FechaReferenciaABDCP" type="TipoFechaHora"/>
+			<xsd:element name="Numeracion" type="TipoNumero"/>
+			<xsd:element name="CodigoReceptor" type="TipoCodigoOperador"/>
+			<xsd:element name="CodigoCedente" type="TipoCodigoOperador"/>
+			<xsd:element name="TipoDocumentoIdentidad" type="TipoTipoDocumentoIdentidad"/>
+			<xsd:element name="NumeroDocumentoIdentidad" type="TipoNumeroDocumentoIdentidad"/>
+			<xsd:element name="TipoPortabilidad" type="TipoPortabilidad"/>
+			<xsd:element name="NombreContacto" type="TipoNombreContacto" minOccurs="0"/>
+			<xsd:element name="EmailContacto" type="TipoEmailContacto" minOccurs="0"/>
+			<xsd:element name="TelefonoContacto" type="TipoTelefonoContacto" minOccurs="0"/>
+			<xsd:element name="FaxContacto" type="TipoFaxContacto" minOccurs="0"/>
+			<xsd:element name="TipoServicio" type="TipoServicio"/>
+			<xsd:element name="Cliente" type="TipoCliente" minOccurs="0"/>
+		</xsd:sequence>
+		<!-- ESC / ECPC-->
+	</xsd:complexType>
+	<xsd:complexType name="TipoObjecionConcesionarioCedente">
+		<xsd:sequence>
+			<xsd:element name="CausaObjecion" type="TipoCausaObjecion"/>
+			<xsd:element name="Numeracion" type="TipoNumero"/>
+			<xsd:element name="FechaVencimiento" type="TipoFecha" minOccurs="0"/>
+			<xsd:element name="Monto" type="TipoMonto" minOccurs="0"/>
+			<xsd:element name="Moneda" type="TipoMoneda" minOccurs="0"/>
+		</xsd:sequence>
+		<!-- OCC / CPOCC -->
+	</xsd:complexType>
+	<xsd:complexType name="TipoSolicitudAceptadaCedente">
+		<xsd:sequence>
+			<xsd:element name="Observaciones" type="TipoObservaciones"/>
+		</xsd:sequence>
+		<!-- SAC / CPAC -->
+	</xsd:complexType>
+	<xsd:complexType name="TipoSolicitudProcedente">
+		<xsd:sequence>
+			<xsd:element name="FechaLimiteProgramacionPortabilidad" type="TipoFechaHora" minOccurs="0"/>
+			<xsd:element name="FechaLimiteEjecucionPortabilidad" type="TipoFechaHora" minOccurs="0"/>
+			<xsd:element name="FechaReferenciaABDCP" type="TipoFechaHora" minOccurs="0"/>
+			<xsd:element name="NumeroConsultaPrevia" type="TipoIdentificadorSolicitud" minOccurs="0"/>
+		</xsd:sequence>
+		<!-- SPR / CPSPR -->
+	</xsd:complexType>
+	<xsd:complexType name="TipoProgramacionPortabilidad">
+		<xsd:sequence>
+			<xsd:element name="FechaEjecucionPortabilidad" type="TipoFechaHora"/>
+		</xsd:sequence>
+		<!-- PP -->
+	</xsd:complexType>
+	<xsd:complexType name="TipoCancelacionNoProgramacionFecha">
+		<xsd:sequence>
+			<xsd:element name="FechaLimiteProgramacionPortabilidad" type="TipoFechaHora"/>
+		</xsd:sequence>
+		<!-- CNPF -->
+	</xsd:complexType>
+	<xsd:complexType name="TipoFueraLimiteEjecutarPortabilidad">
+		<xsd:sequence>
+			<xsd:element name="FechaLimiteProgramacionPortabilidad" type="TipoFechaHora"/>
+			<xsd:element name="FechaLimiteEjecucionPortabilidad" type="TipoFechaHora"/>
+		</xsd:sequence>
+		<!-- FLEP -->
+	</xsd:complexType>
+	<xsd:complexType name="TipoProgramadaEjecutarPortabilidad">
+		<xsd:sequence>
+			<xsd:element name="FechaEjecucionPortabilidad" type="TipoFechaHora"/>
+		</xsd:sequence>
+		<!-- PEP -->
+	</xsd:complexType>
+	<xsd:complexType name="TipoSolicitudRetorno">
+		<xsd:sequence>
+			<xsd:element name="Observaciones" type="TipoObservaciones"/>
+			<xsd:element name="CodigoReceptor" type="TipoCodigoOperador"/>
+			<xsd:element name="CodigoCedente" type="TipoCodigoOperador" minOccurs="0"/>
+			<xsd:element name="NumeracionARetornar" type="TipoNumero"/>
+			<xsd:element name="FechaEjecucionRetorno" type="TipoFechaHora"/>
+			<xsd:element name="MotivoRetorno" type="TipoMotivoRetorno"/>
+			<xsd:element name="NombreContacto" type="TipoNombreContacto" minOccurs="0"/>
+			<xsd:element name="EmailContacto" type="TipoEmailContacto" minOccurs="0"/>
+			<xsd:element name="TelefonoContacto" type="TipoTelefonoContacto" minOccurs="0"/>
+			<xsd:element name="FaxContacto" type="TipoFaxContacto" minOccurs="0"/>
+		</xsd:sequence>
+		<!-- SR -->
+	</xsd:complexType>
+	<xsd:complexType name="TipoDenegacionRetorno">
+		<xsd:sequence>
+			<xsd:element name="CausaRechazo" type="TipoCausaRechazoRetorno"/>
+		</xsd:sequence>
+		<!-- DR -->
+	</xsd:complexType>
+	<xsd:complexType name="TipoAceptacionRetorno">
+		<xsd:sequence>
+			<xsd:element name="FechaEjecucionRetorno" type="TipoFechaHora"/>
+		</xsd:sequence>
+		<!-- AR -->
+	</xsd:complexType>
+	<xsd:complexType name="TipoAcreditacionPagoDeuda">
+		<xsd:sequence>
+			<xsd:element name="FechaPago" type="TipoFechaHora"/>
+			<xsd:element name="EntidadPago" type="TipoEntidadPago"/>
+			<xsd:element name="Numeracion" type="TipoNumero"/>
+			<xsd:element name="NumeroOperacionPago" type="TipoNumeroOperacionPago"/>
+			<xsd:element name="Monto" type="TipoMonto"/>
+			<xsd:element name="Moneda" type="TipoMoneda"/>
+			<xsd:element name="DocumentoAdjunto" type="TipoDocumentoOpcional"/>
+		</xsd:sequence>
+		<!-- APD / APDC -->
+	</xsd:complexType>
+	<xsd:complexType name="TipoNotificacionError">
+		<xsd:sequence>
+			<xsd:element name="CodigoError" type="TipoCodigoError"/>
+			<xsd:element name="DescripcionCodigoError" type="Len200Str"/>
+		</xsd:sequence>
+		<!-- NE -->
+	</xsd:complexType>
+</xsd:schema>

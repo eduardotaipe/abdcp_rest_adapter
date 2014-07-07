@@ -46,3 +46,7 @@ ABDCP_MESSAGE_TYPE_CHOICES = Enumeration([
     ('NI', 'NI', strings.ABDCP_MESSAGE_TYPE_NI),
     ('NE', 'NE', strings.ABDCP_MESSAGE_TYPE_NE)
 ])
+
+ABDCP_MESSAGE_XSD_FILENAME = 'iconectivSchemaABDCP_04242014.xsd'
+ABDCP_MESSAGE_XSD_DIRPATH = '%(DATA_DIR)s/xsd'
+
