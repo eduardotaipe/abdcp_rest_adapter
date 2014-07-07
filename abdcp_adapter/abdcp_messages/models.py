@@ -80,3 +80,7 @@ class ABDCPMessage(models.Model):
 
     def __unicode__(self):
         return self.message_id
+
+    @classmethod
+    def is_duplicated(cls, message_id):
+        return ABDCPMessage.objects.filter(message_id=message_id).exists()
