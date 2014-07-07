@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+import pytz
+
+from django.conf import settings
 from djxml import xmlmodels
 from operators.models import Operator
 from abdcp_messages.models import ABDCPMessage
+from abdcp_messages import constants
 
 class ABDCP_XML_Message(xmlmodels.XmlModel):
 
@@ -51,4 +55,12 @@ class ABDCP_XML_Message(xmlmodels.XmlModel):
 
     def get_message_creation_date_as_datetime(self):
         src = self.message_creation_date
-        return datetime.datetime.strptime(src,'%Y%m%d%H%M%S')
+        value = datetime.datetime.strptime(src,'%Y%m%d%H%M%S')
+        value = value.replace(tzinfo=pytz.timezone(settings.TIME_ZONE))
+        return value
+
+    def get_process_type(self):
+        try:
+            constants.ABDCP_MESSAGE_TO_PROCESS_MAP[self.message_type]
+        except KeyError:
+            return None

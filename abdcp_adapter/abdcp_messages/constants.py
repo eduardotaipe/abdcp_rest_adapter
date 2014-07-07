@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from collections import OrderedDict
 from common.datastructures import Enumeration
 from abdcp_messages import strings
 
@@ -46,6 +47,21 @@ ABDCP_MESSAGE_TYPE_CHOICES = Enumeration([
     ('NI', 'NI', strings.ABDCP_MESSAGE_TYPE_NI),
     ('NE', 'NE', strings.ABDCP_MESSAGE_TYPE_NE)
 ])
+
+ABDCP_MESSAGE_TYPES_BY_PROCESS_TYPE = OrderedDict([
+    ('01', [ 'SP', 'ANS', 'ESC', 'OCC', 'SAC', 'APD', 'APDC',
+            'RABDCP', 'SPR', 'CPSPR', 'CNPF', 'PP', 'FLEP', 'PEP']),
+    ('02', [ 'SR', 'AR', 'DR']),
+    ('04', [ 'NI', 'NE']),
+    ('05', [ 'CP', 'ANCP', 'CPRABD', 'ECPC', 'CPOCC', 'CPAC', 'CPPR'])
+])
+
+ABDCP_MESSAGE_TO_PROCESS_MAP = OrderedDict()
+
+for process_type, message_types in \
+    ABDCP_MESSAGE_TYPES_BY_PROCESS_TYPE.iteritems():
+    for mt in message_types:
+        ABDCP_MESSAGE_TO_PROCESS_MAP[mt] = process_type
 
 ABDCP_MESSAGE_XSD_FILENAME = 'iconectivSchemaABDCP_04242014.xsd'
 ABDCP_MESSAGE_XSD_DIRPATH = '%(DATA_DIR)s/xsd'
