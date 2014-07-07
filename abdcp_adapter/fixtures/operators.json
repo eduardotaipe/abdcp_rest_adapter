@@ -1,0 +1,35 @@
+[
+{
+    "pk": 1, 
+    "model": "operators.operator", 
+    "fields": {
+        "updated": "2014-07-07T02:38:12Z", 
+        "code": "00", 
+        "created": "2014-07-07T02:38:12Z", 
+        "name": "iConectiv", 
+        "uri": "http://www.iconectiv.com/"
+    }
+},
+{
+    "pk": 2, 
+    "model": "operators.operator", 
+    "fields": {
+        "updated": "2014-07-07T02:36:23Z", 
+        "code": "21", 
+        "created": "2014-07-07T02:36:23Z", 
+        "name": "Telef\u00f3nica M\u00f3viles Per\u00fa S.A.C.", 
+        "uri": "http://www.movistar.com.pe/"
+    }
+},
+{
+    "pk": 3, 
+    "model": "operators.operator", 
+    "fields": {
+        "updated": "2014-07-07T02:37:04Z", 
+        "code": "24", 
+        "created": "2014-07-07T02:37:04Z", 
+        "name": "Am\u00e9rica M\u00f3vil PERU S.A.C.", 
+        "uri": "http://www.claro.com.pe/"
+    }
+}
+]
