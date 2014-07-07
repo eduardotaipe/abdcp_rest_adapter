@@ -2,13 +2,14 @@ Django==1.6.5
 MySQL-python==1.2.5
 South==1.0
 argparse==1.2.1
--e git+https://github.com/gnrfan/django-restful.git@4e7be7888f6953df4cfc81855a7ca7929a925e63#egg=django_restful-master
+-e git+https://github.com/gnrfan/django-restful.git@a1c35815462eb094d8570707fe18686d8cc2a300#egg=django_restful-master
 -e git+https://github.com/gnrfan/django-sequence-field.git@7b5975f26dd33a11b6588a40abfd510c3867115f#egg=django_sequence_field-master
 -e git+https://github.com/gnrfan/django-xml.git@e7e1243b9699fd8c43d73da27d4a3f2552c380b4#egg=django_xml-master
--e git+https://github.com/gnrfan/python-easyxsd.git@cc6688366004d4e109cf20edf2fcce6086aaa23d#egg=easyxsd-master
+-e git+https://github.com/gnrfan/python-easyxsd.git@fb6f6bc6bd31a59ee5b2e4d9b758ecfc84d4addf#egg=easyxsd-master
 lxml==3.3.5
 python-dateutil==2.2
 pytz==2014.4
 requests==2.3.0
+-e git+https://github.com/gnrfan/rfc3339.git@250589f6d9ba4893b826f37ff453e33233b22736#egg=rfc3339-master
 six==1.7.3
 wsgiref==0.1.2

@@ -110,3 +110,34 @@ STATED_CREATION_DATE_VALIDATION_ERROR = _(
     u'The value \'%(date)s\' does not seem to be a valid ABDCP date '
     u'in the \'%%Y%%m%%d%%H%%M%%S\' format'
 )
+
+# RESTful API
+
+JSON_REQUIRED_RESTFUL_API_ERROR = _(
+    u'The request body content type must be application/json'
+)
+
+INVALID_JSON_RESTFUL_API_ERROR = _(
+    u'The request body must contain a valid JSON document'
+)
+
+UNEXPECTED_STRUCTURE_RESTFUL_API_ERROR = _(
+    u'The JSON body does not seem to have the expected structure'
+)
+
+INVALID_CREDENTIALS_RESTFUL_API_ERROR = _(
+    u'Invalid ABDCP credentials: userID and/or password is wrong'
+)
+
+INVALID_XML_DOCUMENT_RESTFUL_API_ERROR = _(
+    u'Invalid ABDCP XML document: one or more validation error(s) found'
+)
+
+DUPLICATED_MESSAGE_RESTFUL_API_ERROR = _(
+    u'The message with id %(message_id)s already exists'
+)
+
+MESSAGE_NOT_CREATED_RESTFUL_API_ERROR = _(
+    u'The message with id %(message_id)s could not be created due '
+    u'to an application error. Please report the incident'
+)
