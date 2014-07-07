@@ -59,6 +59,12 @@ class ABDCPMessage(models.Model):
         null=True
     )
 
+    stated_creation = models.DateTimeField(
+        verbose_name=strings.ABDCP_MESSAGE_STATED_CREATION,
+        blank=True,
+        null=True
+    )
+
     created = models.DateTimeField(
         verbose_name=strings.ABDCP_MESSAGE_CREATED,
         auto_now_add=True
