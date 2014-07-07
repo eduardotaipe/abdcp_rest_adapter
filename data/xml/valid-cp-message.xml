@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MensajeABDCP>
+    <CabeceraMensaje>
+        <IdentificadorMensaje>21201405051350480</IdentificadorMensaje>
+        <Remitente>21</Remitente>
+        <Destinatario>00</Destinatario>
+        <FechaCreacionMensaje>20140505135048</FechaCreacionMensaje>
+        <IdentificadorProceso>21201405050550481</IdentificadorProceso>
+    </CabeceraMensaje>
+    <CuerpoMensaje IdMensaje="CP">
+        <ConsultaPrevia>
+            <CodigoReceptor>21</CodigoReceptor>
+            <CodigoCedente>24</CodigoCedente>
+            <TipoDocumentoIdentidad>05</TipoDocumentoIdentidad>
+            <NumeroDocumentoIdentidad>1</NumeroDocumentoIdentidad>
+            <CantidadNumeraciones>1</CantidadNumeraciones>
+            <NumeracionSolicitada>
+                <RangoNumeracion>
+                    <InicioRango>21255514</InicioRango>
+                    <FinalRango>21255514</FinalRango>
+                    <TipoPortabilidad>01</TipoPortabilidad>
+                </RangoNumeracion>
+            </NumeracionSolicitada>
+            <Observaciones/>
+            <NombreContacto>Santiago</NombreContacto>
+            <EmailContacto>a@a.com</EmailContacto>
+            <TelefonoContacto>73269990000</TelefonoContacto>
+            <FaxContacto>73269990001</FaxContacto>
+            <TipoServicio>1</TipoServicio>
+            <Cliente>2</Cliente>
+        </ConsultaPrevia>
+    </CuerpoMensaje>
+</MensajeABDCP>
