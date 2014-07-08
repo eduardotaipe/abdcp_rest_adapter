@@ -64,3 +64,67 @@ class ABDCP_XML_Message(xmlmodels.XmlModel):
             constants.ABDCP_MESSAGE_TO_PROCESS_MAP[self.message_type]
         except KeyError:
             return None
+
+
+# CP - Consulta Previa
+
+class CP_ABDCP_XML_Message(ABDCP_XML_Message):
+
+    codigo_receptor = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/ConsultaPrevia/CodigoReceptor'
+    )
+
+    codigo_cedente = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/ConsultaPrevia/CodigoCedente'
+    )
+
+    tipo_documento_identidad = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/ConsultaPrevia/TipoDocumentoIdentidad'
+    )
+    
+    numero_documento_identidad = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/ConsultaPrevia/NumeroDocumentoIdentidad'
+    )
+
+    cantidad_numeraciones = xmlmodels.XPathIntegerField(
+        '//CuerpoMensaje/ConsultaPrevia/CantidadNumeraciones'
+    )
+
+    inicio_rango = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/ConsultaPrevia/NumeracionSolicitada'
+        '/RangoNumeracion/InicioRango'
+    )
+
+    final_rango = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/ConsultaPrevia/NumeracionSolicitada'
+        '/RangoNumeracion/FinalRango'
+    )
+
+    tipo_portabilidad = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/ConsultaPrevia/NumeracionSolicitada'
+        '/RangoNumeracion/TipoPortabilidad'
+    )
+
+    nombre_contacto = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/ConsultaPrevia/NombreContacto'
+    )
+
+    email_contacto = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/ConsultaPrevia/EmailContacto'
+    )
+
+    telefono_contacto = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/ConsultaPrevia/TelefonoContacto'
+    )
+
+    fax_contacto = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/ConsultaPrevia/FaxContacto'
+    )
+
+    tipo_servicio = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/ConsultaPrevia/TipoServicio'
+    )
+
+    cliente = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/ConsultaPrevia/Cliente'
+    )
