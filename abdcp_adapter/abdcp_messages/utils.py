@@ -37,3 +37,19 @@ def process_type_from_message_type(message_type):
         constants.ABDCP_MESSAGE_TO_PROCESS_MAP[message_type]
     except KeyError:
         return None
+
+def xmlstr_to_dict(xmlstr):
+    """
+    Converts an XML string into a Python dictionary using the
+    'xmltodict' module
+    """
+    import xmltodict
+    return xmltodict.parse(xmlstr)
+
+def dict_to_xmlstr(value):
+    """
+    Converts a Python dictionary into an XML string using the 
+    'xmldict' module
+    """
+    import xmldict
+    return xmldict.dict_to_xml(value)

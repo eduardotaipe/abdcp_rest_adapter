@@ -7,9 +7,12 @@ argparse==1.2.1
 -e git+https://github.com/gnrfan/django-xml.git@e7e1243b9699fd8c43d73da27d4a3f2552c380b4#egg=django_xml-master
 -e git+https://github.com/gnrfan/python-easyxsd.git@fb6f6bc6bd31a59ee5b2e4d9b758ecfc84d4addf#egg=easyxsd-master
 lxml==3.3.5
+pyToXml==1.1.0
 python-dateutil==2.2
 pytz==2014.4
 requests==2.3.0
 -e git+https://github.com/gnrfan/rfc3339.git@250589f6d9ba4893b826f37ff453e33233b22736#egg=rfc3339-master
 six==1.7.3
 wsgiref==0.1.2
+xmldict==0.4.1
+xmltodict==0.9.0
