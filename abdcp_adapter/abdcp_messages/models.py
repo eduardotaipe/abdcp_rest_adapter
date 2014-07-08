@@ -7,6 +7,14 @@ from operators.models import Operator
 
 # ABDCP Messages
 
+class ABDCPMessageManager(models.Manager):
+
+    def pending(self):
+        return self.filter(
+            response_document__isnull=True
+        )
+
+
 class ABDCPMessage(models.Model):
 
     message_id = models.CharField(
@@ -79,6 +87,8 @@ class ABDCPMessage(models.Model):
         verbose_name=strings.ABDCP_MESSAGE_UPDATED,
         auto_now=True
     )
+
+    objects = ABDCPMessageManager()
 
     class Meta:
         verbose_name = strings.ABDCP_MESSAGE_MODEL_NAME
