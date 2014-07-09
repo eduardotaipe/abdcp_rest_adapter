@@ -52,7 +52,7 @@ class ABDCPXMLBuilder(BaseXMLBuilder):
         message_head['Remitente'] = sender_code
         message_head['Destinatario'] = recipient_code
         message_head['IdentificadorProceso'] = process_id
-        message_head['FechaCreacionMensaje'] = self.format_date(
+        message_head['FechaCreacionMensaje'] = self.format_datetime(
             stated_creation
         )
 
@@ -86,7 +86,12 @@ class ABDCPXMLBuilder(BaseXMLBuilder):
             return None
 
 
-    def format_date(self, dt):
+    def format_date(self, d):
+        fmtstr = '%Y%m%d'
+        return time.strftime(fmtstr, d.timetuple())
+
+
+    def format_datetime(self, dt):
         fmtstr = '%Y%m%d%H%M%S'
         return time.strftime(fmtstr, dt.timetuple())
 
@@ -107,5 +112,39 @@ class CPAC_XMLBuilder(ABDCPXMLBuilder):
         payload = self.get_payload()
 
         if payload is not None:
-            payload['numeracion'] = numeracion
-            payload['observaciones'] = observaciones
+            payload['Numeracion'] = numeracion
+            payload['Observaciones'] = observaciones
+
+
+class OCC_XMLBuilder(ABDCPXMLBuilder):
+
+    payload_name = 'ObjecionConcesionarioCedente'
+
+    def __init__(self, **params):
+
+        params['message_type'] = 'OCC'
+
+        super(OCC_XMLBuilder, self).__init__(**params)
+        
+        causa_objecion = params.get('causa_objecion')
+        numeracion = params.get('numeracion')
+        fecha_vencimiento = params.get('fecha_vencimiento', None)
+        monto = params.get('monto', None)
+        moneda = params.get('moneda', None)
+
+        payload = self.get_payload()
+
+        if payload is not None:
+            payload['CausaObjecion'] = causa_objecion
+            payload['Numeracion'] = numeracion
+
+            if fecha_vencimiento is not None:
+                payload['FechaVencimiento'] = self.format_date(
+                    fecha_vencimiento
+                )
+
+            if monto is not None:
+                payload['Monto'] = monto
+
+            if moneda is not None:
+                payload['Moneda'] = moneda
