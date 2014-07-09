@@ -47,7 +47,7 @@ class ABDCPXMLBuilder(BaseXMLBuilder):
         message_head = self['MensajeABDCP']['CabeceraMensaje']
         message_body =  self['MensajeABDCP']['CuerpoMensaje']
 
-        message_head['@IdMensaje'] = message_type
+        message_body['@IdMensaje'] = message_type
         message_head['IdentificadorMensaje'] = message_id
         message_head['Remitente'] = sender_code
         message_head['Destinatario'] = recipient_code
@@ -60,3 +60,21 @@ class ABDCPXMLBuilder(BaseXMLBuilder):
     def format_date(self, dt):
         fmtstr = '%Y%m%d%H%M%S'
         return time.strftime(fmtstr, dt.timetuple())
+
+
+class CPAC_XMLBuilder(ABDCPXMLBuilder):
+
+    def __init__(self, **params):
+
+        params['message_type'] = 'CPAC'
+
+        super(CPAC_XMLBuilder, self).__init__(**params)
+        
+        numeracion = params.get('numeracion')
+        observaciones = params.get('observaciones')
+
+        message_body =  self['MensajeABDCP']['CuerpoMensaje']
+        message_body['ConsultaPreviaAceptadaCedente'] = OrderedDict()
+        payload = message_body['ConsultaPreviaAceptadaCedente']
+        payload['numeracion'] = numeracion
+        payload['observaciones'] = observaciones

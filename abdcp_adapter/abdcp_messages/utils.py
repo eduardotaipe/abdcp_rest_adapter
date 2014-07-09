@@ -61,7 +61,7 @@ def beautify_xmlstr(xmlstr):
     """
     from lxml import etree
     root = etree.XML(xmlstr.strip())
-    return etree.tostring(root, pretty_print=True)
+    return etree.tostring(root, pretty_print=True).strip()
 
 
 def pretty_print_xmlstr(xmlstr):
