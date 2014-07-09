@@ -15,6 +15,7 @@ ABDCP_MESSAGE_MESSAGE_TYPE = _(u'Tipo de proceso')
 ABDCP_MESSAGE_STATED_CREATION = _(u'Fecha y hora de creación indicada')
 ABDCP_MESSAGE_CREATED = _(u'Fecha y hora de creación')
 ABDCP_MESSAGE_RESPONDED = _(u'Fecha y hora de respuesta')
+ABDCP_MESSAGE_DELIVERED = _(u'Fecha y hora de entrega')
 ABDCP_MESSAGE_UPDATED = _(u'Fecha y hora de modificación')
 
 ABDCP_MESSAGE_MODEL_NAME = _(u'Mensaje XML ABDCP')

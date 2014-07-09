@@ -83,6 +83,11 @@ class ABDCPMessage(models.Model):
         null=True
     )
 
+    delivered = models.DateTimeField(
+        verbose_name=strings.ABDCP_MESSAGE_DELIVERED,
+        null=True
+    )
+
     updated = models.DateTimeField(
         verbose_name=strings.ABDCP_MESSAGE_UPDATED,
         auto_now=True
