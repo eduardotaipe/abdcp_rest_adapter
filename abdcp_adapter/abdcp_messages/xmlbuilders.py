@@ -44,8 +44,8 @@ class ABDCPXMLBuilder(BaseXMLBuilder):
         self['MensajeABDCP']['CabeceraMensaje'] = OrderedDict()
         self['MensajeABDCP']['CuerpoMensaje'] = OrderedDict()
 
-        message_head = self['MensajeABDCP']['CabeceraMensaje']
-        message_body =  self['MensajeABDCP']['CuerpoMensaje']
+        message_head = self.get_message_head()
+        message_body = self.get_message_body()
 
         message_body['@IdMensaje'] = message_type
         message_head['IdentificadorMensaje'] = message_id
@@ -56,6 +56,35 @@ class ABDCPXMLBuilder(BaseXMLBuilder):
             stated_creation
         )
 
+        self.build_payload()
+
+
+    def get_message_head(self):
+        return self['MensajeABDCP']['CabeceraMensaje']
+
+
+    def get_message_body(self):
+        return self['MensajeABDCP']['CuerpoMensaje']
+
+
+    def build_payload(self, value=OrderedDict()):
+        message_body = self.get_message_body()
+        if hasattr(self, 'payload_name'):
+            message_body[self.payload_name] = value
+
+
+    def get_payload_name(self):
+        return getattr(self, 'payload_name', None)
+
+
+    def get_payload(self):
+        payload_name = self.get_payload_name()
+        message_body = self.get_message_body()
+        if payload_name is not None:
+            return message_body.get(payload_name, None)
+        else:
+            return None
+
 
     def format_date(self, dt):
         fmtstr = '%Y%m%d%H%M%S'
@@ -63,6 +92,8 @@ class ABDCPXMLBuilder(BaseXMLBuilder):
 
 
 class CPAC_XMLBuilder(ABDCPXMLBuilder):
+
+    payload_name = 'ConsultaPreviaAceptadaCedente'
 
     def __init__(self, **params):
 
@@ -73,8 +104,8 @@ class CPAC_XMLBuilder(ABDCPXMLBuilder):
         numeracion = params.get('numeracion')
         observaciones = params.get('observaciones')
 
-        message_body =  self['MensajeABDCP']['CuerpoMensaje']
-        message_body['ConsultaPreviaAceptadaCedente'] = OrderedDict()
-        payload = message_body['ConsultaPreviaAceptadaCedente']
-        payload['numeracion'] = numeracion
-        payload['observaciones'] = observaciones
+        payload = self.get_payload()
+
+        if payload is not None:
+            payload['numeracion'] = numeracion
+            payload['observaciones'] = observaciones
