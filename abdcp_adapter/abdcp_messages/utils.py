@@ -53,3 +53,19 @@ def dict_to_xmlstr(value):
     """
     import xmldict
     return xmldict.dict_to_xml(value)
+
+
+def beautify_xmlstr(xmlstr):
+    """
+    Beautifies string containing a valid XML document
+    """
+    from lxml import etree
+    root = etree.XML(xmlstr.strip())
+    return etree.tostring(root, pretty_print=True)
+
+
+def pretty_print_xmlstr(xmlstr):
+    """
+    Pretty-prints a string containing a valid XML document
+    """
+    print beautify_xmlstr(xmlstr)
