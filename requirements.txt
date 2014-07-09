@@ -5,7 +5,7 @@ argparse==1.2.1
 -e git+https://github.com/gnrfan/django-restful.git@a1c35815462eb094d8570707fe18686d8cc2a300#egg=django_restful-master
 -e git+https://github.com/gnrfan/django-sequence-field.git@7b5975f26dd33a11b6588a40abfd510c3867115f#egg=django_sequence_field-master
 -e git+https://github.com/gnrfan/django-xml.git@e7e1243b9699fd8c43d73da27d4a3f2552c380b4#egg=django_xml-master
--e git+https://github.com/gnrfan/python-easyxsd.git@fb6f6bc6bd31a59ee5b2e4d9b758ecfc84d4addf#egg=easyxsd-master
+-e git+https://github.com/gnrfan/python-easyxsd.git@26b8a25599fce1d9c80de47d6e3f424979ff71b2#egg=easyxsd-master
 lxml==3.3.5
 pyToXml==1.1.0
 python-dateutil==2.2

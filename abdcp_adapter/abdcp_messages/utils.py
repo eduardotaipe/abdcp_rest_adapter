@@ -13,9 +13,14 @@ from abdcp_messages.xmlmodels import ABDCP_XML_Message
 def abdcp_validate_xml_message(xmlstr):
     xml = xml_from_string(xmlstr)
     xsd = xsd_from_file(abdcp_messages_settings.ABDCP_MESSAGE_XSD_FILEPATH)
+    # Some of the files is not valid XML
+    if xml is None or xsd is None:
+        return (False, [], )
+    # Performing the actual validation
     is_valid = validate(xml, xsd)
     errors = xsd_error_log_as_simple_strings(xsd.error_log)
     return (is_valid, errors, )
+
 
 def create_abdcp_message_from_xml_string(xmlstr, commit=True):
     xmlmodel = ABDCP_XML_Message.create_from_string(xmlstr)
@@ -32,11 +37,13 @@ def create_abdcp_message_from_xml_string(xmlstr, commit=True):
         message.save()
     return message
 
+
 def process_type_from_message_type(message_type):
     try:
         constants.ABDCP_MESSAGE_TO_PROCESS_MAP[message_type]
     except KeyError:
         return None
+
 
 def xmlstr_to_dict(xmlstr):
     """
@@ -45,6 +52,7 @@ def xmlstr_to_dict(xmlstr):
     """
     import xmltodict
     return xmltodict.parse(xmlstr)
+
 
 def dict_to_xmlstr(value):
     """
