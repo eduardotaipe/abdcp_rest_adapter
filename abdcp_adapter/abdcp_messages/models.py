@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
+import datetime
+import pytz
+
 from django.db import models
+from django.conf import settings
 from abdcp_messages import strings
 from abdcp_messages import constants
 from operators.models import Operator
@@ -9,9 +13,18 @@ from operators.models import Operator
 
 class ABDCPMessageManager(models.Manager):
 
-    def pending(self):
+    def pending_response(self):
         return self.filter(
-            response_document__isnull=True
+            response_document__isnull=True,
+            responded__isnull=True,
+            delivered__isnull=True
+        )
+
+    def pending_delivery(self):
+        return self.filter(
+            response_document__isnull=False,
+            responded__isnull=False,
+            delivered__isnull=True
         )
 
 
@@ -105,3 +118,15 @@ class ABDCPMessage(models.Model):
     @classmethod
     def is_duplicated(cls, message_id):
         return ABDCPMessage.objects.filter(message_id=message_id).exists()
+
+    def mark_responded(self, commit=True):
+        tzinfo = pytz.timezone(settings.TIME_ZONE)
+        self.responded = datetime.datetime.now(tzinfo)
+        if commit:
+            self.save()
+
+    def mark_delivered(self, commit=True):
+        tzinfo = pytz.timezone(settings.TIME_ZONE)
+        self.delivered = datetime.datetime.now(tzinfo)
+        if commit:
+            self.save()
