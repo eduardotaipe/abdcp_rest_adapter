@@ -64,7 +64,7 @@ class ABDCPMessage(models.Model):
         null=True
     )
     
-    process_type = models.TextField(
+    process_type = models.CharField(
         verbose_name=strings.ABDCP_MESSAGE_PROCESS_TYPE,
         choices=constants.ABDCP_PROCESS_CHOICES,
         max_length=2,
@@ -130,3 +130,14 @@ class ABDCPMessage(models.Model):
         self.delivered = datetime.datetime.now(tzinfo)
         if commit:
             self.save()
+
+
+    def get_request_as_dict(self):
+        from abdcp_messages.utils import xmlstr_to_dict
+        return xmlstr_to_dict(self.request_document)
+
+
+    def get_response_as_dict(self):
+        from abdcp_messages.utils import xmlstr_to_dict
+        return xmlstr_to_dict(self.response_document)
+

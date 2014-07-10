@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import xmldict
+import xmltodict
+
 from easyxsd import xsd_from_file
 from easyxsd import xml_from_string
 from easyxsd import xsd_error_log_as_simple_strings
@@ -31,7 +34,8 @@ def create_abdcp_message_from_xml_string(xmlstr, commit=True):
         transaction_id=xmlmodel.transaction_id,
         stated_creation=xmlmodel.get_message_creation_date_as_datetime(),
         message_type=xmlmodel.message_type,
-        process_type=xmlmodel.get_process_type()
+        process_type=xmlmodel.get_process_type(),
+        request_document=xmlstr
     )
     if commit:
         message.save()
@@ -50,8 +54,7 @@ def xmlstr_to_dict(xmlstr):
     Converts an XML string into a Python dictionary using the
     'xmltodict' module
     """
-    import xmltodict
-    return xmltodict.parse(xmlstr)
+    return xmltodict.parse(str(xmlstr))
 
 
 def dict_to_xmlstr(value):
@@ -59,7 +62,6 @@ def dict_to_xmlstr(value):
     Converts a Python dictionary into an XML string using the 
     'xmldict' module
     """
-    import xmldict
     return xmldict.dict_to_xml(value)
 
 
