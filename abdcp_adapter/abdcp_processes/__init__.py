@@ -7,6 +7,7 @@ class ABDCPProcessor(object):
 
     def __init__(self, message=None):
         self.set_message(message)
+        self.set_xmlmodel()
         self.set_response(None)
         self.set_api_client()
 
@@ -24,6 +25,22 @@ class ABDCPProcessor(object):
 
     def set_response(self, xmlstr):
         self.response = xmlstr
+
+    def set_xmlmodel(self):
+        xmlstr = str(self.message.request_document)
+        xmlmodel_class = self.get_xmlmodel_class()
+        if xmlmodel_class is not None:
+            self.xmlmodel = self.xmlmodel_class.create_from_string(xmlstr)
+        else:
+            self.xmlmodel = None
+
+
+    def get_xmlmodel_class(self):
+        return getattr(self, 'xmlmodel_class', None)
+
+
+    def get_request_as_dict(self):
+        return self.message.get_request_as_dict()
 
 
     def generate_response(self):
