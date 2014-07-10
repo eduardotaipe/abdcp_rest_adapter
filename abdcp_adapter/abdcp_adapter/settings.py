@@ -89,6 +89,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# Portability API
+PORTABILITY_API_BASE_URL = 'http://portability-api-server.com/path/to/api'
+PORTABILITY_API_KEY = '<some API key>'
+
 # Local settings
 try:
     from local_settings import *
