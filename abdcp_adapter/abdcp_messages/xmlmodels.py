@@ -61,7 +61,7 @@ class ABDCP_XML_Message(xmlmodels.XmlModel):
 
     def get_process_type(self):
         try:
-            constants.ABDCP_MESSAGE_TO_PROCESS_MAP[self.message_type]
+            return constants.ABDCP_MESSAGE_TO_PROCESS_MAP[self.message_type]
         except KeyError:
             return None
 
