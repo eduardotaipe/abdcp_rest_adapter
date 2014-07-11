@@ -2,6 +2,8 @@
 
 from django.conf import settings
 from requests_portability import PortabilityAPI
+from abdcp_adapter.utils import load_class
+from abdcp_messages import constants
 
 class ABDCPProcessor(object):
 
@@ -70,3 +72,31 @@ class ABDCPProcessor(object):
         self.generate_response()
         self.save_response()
         self.mark_responded()
+
+    @classmethod
+    def processor_factory(cls,message):
+        process_type = \
+            constants.ABDCP_PROCESS_CHOICES.get_key(message.process_type)
+        message_type = message.message_type
+
+        cls_path  = "abdcp_processes.%(process_type)s.%(message_type)s" 
+        cls_path += "_ABDCPProcessor"
+        cls_path  = cls_path % {
+            "process_type" : process_type.lower(),
+            "message_type" : message_type
+        }
+
+        print cls_path
+
+        try:
+            
+            klass = load_class(cls_path)
+            print klass
+            return klass(message=message)
+
+        except (ValueError,ImportError):
+            return None
+
+        
+
+
