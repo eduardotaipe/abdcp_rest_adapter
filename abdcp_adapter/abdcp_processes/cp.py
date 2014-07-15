@@ -16,6 +16,8 @@ class CP_ABDCPProcessor(ABDCPProcessor):
 
     def generate_response(self):
         op = self.load_number_information()
+        xmlstr = None
+        self.set_response(xmlstr)
 
 
     # Accessing request information

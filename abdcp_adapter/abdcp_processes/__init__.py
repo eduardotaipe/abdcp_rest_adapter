@@ -4,10 +4,12 @@ from django.conf import settings
 from requests_portability import PortabilityAPI
 from abdcp_adapter.utils import load_class
 from abdcp_messages import constants
+import ipdb
 
 class ABDCPProcessor(object):
 
     def __init__(self, message=None):
+
         self.set_message(message)
         self.set_xmlmodel()
         self.set_response(None)
@@ -75,6 +77,8 @@ class ABDCPProcessor(object):
 
     @classmethod
     def processor_factory(cls,message):
+        # import ipdb
+        # ipdb.set_trace()
         process_type = \
             constants.ABDCP_PROCESS_CHOICES.get_key(message.process_type)
         message_type = message.message_type
@@ -86,12 +90,9 @@ class ABDCPProcessor(object):
             "message_type" : message_type
         }
 
-        print cls_path
-
         try:
             
             klass = load_class(cls_path)
-            print klass
             return klass(message=message)
 
         except (ValueError,ImportError):
