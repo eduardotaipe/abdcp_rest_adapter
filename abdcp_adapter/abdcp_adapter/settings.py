@@ -155,6 +155,11 @@ SEQUENCE_FIELD_DEFAULT_PATTERN =  r'(\d+)'
 
 SEQUENCE_FIELD_DEFAULT_EXPANDERS = "Already mentioned in the previous section."
 
+
+LOCAL_OPERADOR_ID = "45"
+
+ABDCP_OPERADOR_ID = "00"
+
 # Local settings
 try:
     from local_settings import *

@@ -116,15 +116,15 @@ class CPAC_XMLBuilder(ABDCPXMLBuilder):
             payload['Observaciones'] = observaciones
 
 
-class OCC_XMLBuilder(ABDCPXMLBuilder):
+class CPOCC_XMLBuilder(ABDCPXMLBuilder):
 
-    payload_name = 'ObjecionConcesionarioCedente'
+    payload_name = 'ConsultaPreviaObjecionConcesionarioCedente'
 
     def __init__(self, **params):
 
-        params['message_type'] = 'OCC'
+        params['message_type'] = 'CPOCC'
 
-        super(OCC_XMLBuilder, self).__init__(**params)
+        super(CPOCC_XMLBuilder, self).__init__(**params)
         
         causa_objecion = params.get('causa_objecion')
         numeracion = params.get('numeracion')

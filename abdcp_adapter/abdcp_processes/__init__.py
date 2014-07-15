@@ -66,19 +66,17 @@ class ABDCPProcessor(object):
     def process_response(self, commit=True):
         response = self.generate_response()
         self.set_response(response)
-        if commit:
+        if response is not None and commit:
             self.save_response(response)
 
-
     def process(self):
-        self.generate_response()
-        self.save_response()
-        self.mark_responded()
+        self.process_response()
+        if self.response is not None:
+            self.mark_responded()
+        
 
     @classmethod
     def processor_factory(cls,message):
-        # import ipdb
-        # ipdb.set_trace()
         process_type = \
             constants.ABDCP_PROCESS_CHOICES.get_key(message.process_type)
         message_type = message.message_type
@@ -91,10 +89,8 @@ class ABDCPProcessor(object):
         }
 
         try:
-            
             klass = load_class(cls_path)
             return klass(message=message)
-
         except (ValueError,ImportError):
             return None
 

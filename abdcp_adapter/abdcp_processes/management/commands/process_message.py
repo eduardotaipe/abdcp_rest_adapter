@@ -9,17 +9,17 @@ from abdcp_processes import ABDCPProcessor
 
 
 class Command(BaseCommand):
-    def handle(self, *args, **options):
-        messages = ABDCPMessage.objects.all()
-        if messages.count()>0:
-            logging.info(
-                    "=== Iniciando Proceso de mensajes recibidos del ABDCP ==="
-                )
+    def get_pending_messages(self):
+        return ABDCPMessage.objects.pending_response()
 
-            for m in messages:
-                p = ABDCPProcessor.processor_factory(m)
-                p.process()
-                
-            logging.info(
-                    "=== Fin de proceso mensajes recibidos del ABDCP ==="
-                )
+    def get_processor(self,message):
+        return ABDCPProcessor.processor_factory(message)
+
+    def handle(self, *args, **options):
+        logging.info("=== Iniciando Proceso de mensajes ABDCP ===")
+        messages = self.get_pending_messages()
+        for message in messages:
+            processor = self.get_processor(message)
+            # print processsor.generate_response()
+            processor.process()
+        logging.info("=== Fin Proceso de mensajes ABDCP ===")

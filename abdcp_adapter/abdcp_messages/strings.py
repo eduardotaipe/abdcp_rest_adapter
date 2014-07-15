@@ -87,6 +87,10 @@ ABDCP_MESSAGE_TYPE_DR = _(u'Denegación de retorno')
 ABDCP_MESSAGE_TYPE_NI = _(u'No integridad')
 ABDCP_MESSAGE_TYPE_NE = _(u'Notificación de error')
 
+ABDCP_MESSAGE_PREVIOUS_CONSULT_ACCEPT = _(
+    U'Previous Consultation Donor Acceptance Response'
+)
+
 # Validators
 
 MESSAGE_ID_VALIDATION_ERROR = _(
@@ -142,3 +146,5 @@ MESSAGE_NOT_CREATED_RESTFUL_API_ERROR = _(
     u'The message with id %(message_id)s could not be created due '
     u'to an application error. Please report the incident'
 )
+
+
