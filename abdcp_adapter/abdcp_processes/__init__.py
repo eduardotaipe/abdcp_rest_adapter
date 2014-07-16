@@ -2,14 +2,13 @@
 
 from django.conf import settings
 from requests_portability import PortabilityAPI
+from requests_portability.client import PortabilityClientError
 from abdcp_adapter.utils import load_class
 from abdcp_messages import constants
-import ipdb
 
 class ABDCPProcessor(object):
 
     def __init__(self, message=None):
-
         self.set_message(message)
         self.set_xmlmodel()
         self.set_response(None)
@@ -17,10 +16,15 @@ class ABDCPProcessor(object):
 
 
     def set_api_client(self):
-        self.api = PortabilityAPI(
-            base_url=settings.PORTABILITY_API_BASE_URL,
-            api_key=settings.PORTABILITY_API_KEY
-        )
+        try:
+            self.api = PortabilityAPI(
+                base_url=settings.PORTABILITY_API_BASE_URL,
+                api_key=settings.PORTABILITY_API_KEY
+            )
+            
+        except PortabilityClientError,e:
+            self.api = None
+            logging.info("Error al Conectarse a ws-integracion-portabilidad")
 
 
     def set_message(self, message):
@@ -70,6 +74,11 @@ class ABDCPProcessor(object):
             self.save_response(response)
 
     def process(self):
+        if self.api is None:
+            logging.info("process: Error al Conectarse a "
+                "ws-integracion-portabilidad")
+            return False
+        
         self.process_response()
         if self.response is not None:
             self.mark_responded()

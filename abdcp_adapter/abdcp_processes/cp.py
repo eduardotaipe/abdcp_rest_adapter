@@ -37,7 +37,7 @@ class CP_ABDCPProcessor(ABDCPProcessor):
         return response.as_xml()
 
     def get_response_error_xml(self):
-        reason= "hmmmm"
+        reason= ""
         common_data = self.get_common_data()
         common_data["causa_objecion"] = reason
         common_data["numeracion"] = self.get_request_number()
@@ -75,11 +75,18 @@ class CP_ABDCPProcessor(ABDCPProcessor):
     # Accesing number information
 
     def load_number_information(self):
+
+
         number = self.get_request_number()
+        
         try:
             self.number_info = self.api.get_number(number)
+            if hasattr(self.number_info,'error'):
+                self.number_info = None
+                return False
             return True
-        except (ClientError, AuthError, APIError):
+        except Exception, e:
+            # except (ClientError, AuthError, APIError):
             self.number_info = None
             return False
 
