@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
+import datetime
+import logging
 
 from django.conf import settings
+
 from requests_portability import PortabilityAPI
-from requests_portability.client import PortabilityClientError
+from requests_portability.client import PortabilityClientError as ClientError
+from requests_portability.client import PortabilityAPIError as APIError
+from requests_portability.client import PortabilityAuthError as AuthError
+
 from abdcp_adapter.utils import load_class
 from abdcp_messages import constants
-
 class ABDCPProcessor(object):
 
     def __init__(self, message=None):
@@ -21,10 +26,14 @@ class ABDCPProcessor(object):
                 base_url=settings.PORTABILITY_API_BASE_URL,
                 api_key=settings.PORTABILITY_API_KEY
             )
-            
-        except PortabilityClientError,e:
-            self.api = None
-            logging.info("Error al Conectarse a ws-integracion-portabilidad")
+            return
+        except ClientError,e:
+            logging.error("set_api_cliente:client error")
+        except APIError,e:
+            logging.error("set_api_cliente:Api error")
+        except AuthError,e:
+            logging.error("Authentication error")
+        self.api = None
 
 
     def set_message(self, message):
@@ -56,32 +65,25 @@ class ABDCPProcessor(object):
 
 
     def mark_responded(self, commit=True):
-        self.message.mark_responded(commit)
+        if self.response is not None:
+            self.message.mark_responded(commit)
 
 
     def save_response(self, xmlstr=None):
         response = xmlstr if xmlstr is not None else self.response
         if response is not None:
             self.message.response_document = response
-            self.responded = datetime.datetime.now()
-            self.save()
+            self.message.save()
 
 
     def process_response(self, commit=True):
         response = self.generate_response()
         self.set_response(response)
-        if response is not None and commit:
-            self.save_response(response)
 
     def process(self):
-        if self.api is None:
-            logging.info("process: Error al Conectarse a "
-                "ws-integracion-portabilidad")
-            return False
-        
         self.process_response()
-        if self.response is not None:
-            self.mark_responded()
+        self.save_response()
+        self.mark_responded()
         
 
     @classmethod
@@ -96,7 +98,6 @@ class ABDCPProcessor(object):
             "process_type" : process_type.lower(),
             "message_type" : message_type
         }
-
         try:
             klass = load_class(cls_path)
             return klass(message=message)

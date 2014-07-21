@@ -1,33 +1,60 @@
 # -*- coding: utf-8 -*-
 
+import logging
+
 from django.conf import settings
+
 from abdcp_messages import strings
 from abdcp_messages.models import ABDCPMessage
-from abdcp_messages.xmlmodels import CP_ABDCP_XML_Message
+from abdcp_messages.xmlmodels import ECPC_ABDCP_XML_Message
 from abdcp_messages.xmlbuilders import CPAC_XMLBuilder,CPOCC_XMLBuilder
+from abdcp_messages import constants
+
 from abdcp_processes import ABDCPProcessor
 
 from requests_portability.client import PortabilityClientError as ClientError
 from requests_portability.client import PortabilityAPIError as APIError
 from requests_portability.client import PortabilityAuthError as AuthError
 
+from sequence_field.models import Sequence
 
-class CP_ABDCPProcessor(ABDCPProcessor):
 
-    xmlmodel_class = CP_ABDCP_XML_Message
+class ECPC_ABDCPProcessor(ABDCPProcessor):
+
+    xmlmodel_class = ECPC_ABDCP_XML_Message
+
+    def generate_process_id(self):
+        process_type = self.message.process_type
+        message_type = self.message.message_type
+        return Sequence.next(
+            message_type,
+            template='%(OO)s%Y%m%d%(TI)s%NNNNN', 
+            params={
+                'OO': settings.LOCAL_OPERATOR_ID,
+                'TI': process_type
+            }
+        )
+    
+    def generate_message_id(self):
+        message_type = self.message.message_type
+        return Sequence.next(
+            message_type + '_message',
+            template='%(OO)s%Y%m%d%NNNNNN', 
+            params={
+                'OO': settings.LOCAL_OPERATOR_ID
+            }
+        )
 
     def get_common_data(self):
-        #implementar sequence field
-        import random
         result = {
-            'message_id' : random.randint(0, 10000),
-            'process_id' : random.randint(0, 10000),
-            'sender_code' : settings.LOCAL_OPERADOR_ID,
-            'recipient_code' : settings.ABDCP_OPERADOR_ID,
+            'message_id' : self.generate_message_id(),
+            'process_id' : self.generate_process_id(),
+            'sender_code' : settings.LOCAL_OPERATOR_ID,
+            'recipient_code' : settings.ABDCP_OPERATOR_ID,
         }
         return result
 
-    def get_response_ok_xml(self):
+    def get_response_ok(self):
         common_data = self.get_common_data()
         common_data["numeracion"] = self.get_request_number()
         common_data["observaciones"] = strings.\
@@ -36,28 +63,52 @@ class CP_ABDCPProcessor(ABDCPProcessor):
         response = CPAC_XMLBuilder(**common_data)
         return response.as_xml()
 
-    def get_response_error_xml(self):
-        reason= ""
+    def get_response_error(self,error_code):
         common_data = self.get_common_data()
-        common_data["causa_objecion"] = reason
+        common_data["causa_objecion"] = error_code
         common_data["numeracion"] = self.get_request_number()
 
         response = CPOCC_XMLBuilder(**common_data)
         return response.as_xml()
 
-    def generate_response(self):
-        if not self.load_number_information():
-            return None
-        
-        if not self.check_number() or True:
-            return self.get_response_error_xml()
+    def phone_not_owned(self):
+        number_info = self.get_number_information()
+        return number_info.error.code == '1000'
 
-        return self.get_response_ok_xml()
+    def get_ABDCP_code(self):
+        if self.get_number_information() is None:
+            raise Exception("Fatal error: no number info")
+
+        if self.phone_not_owned():
+            return constants.ABDCP_OC_PHONE_NOT_OWNED
+
+        if self.service_is_suspended():
+            return constants.ABDCP_OC_SUSPEND_SERVICE
+
+        if not self.valid_type_service():
+            return constants.ABDCP_OC_INVALID_SERVICE_TYPE
+
+        if not self.valid_customer_id():
+            return constants.ABDCP_OC_INVALID_ID_CUSTOMER
+
+        if not self.has_debt():
+            return constants.ABDCP_OC_HAS_DEBT
+
+        return "ok"
+
+    def generate_response(self):
+        self.load_number_information()
+        result_code = self.get_ABDCP_code()
+        
+        if result_code == "ok":
+            return self.get_response_ok()
+
+        return self.get_response_error(result_code)
 
     # Accessing request information
 
     def get_request_number(self):
-        return self.xmlmodel.inicio_rango
+        return self.xmlmodel.numeracion
 
 
     def get_request_line_type(self):
@@ -75,21 +126,8 @@ class CP_ABDCPProcessor(ABDCPProcessor):
     # Accesing number information
 
     def load_number_information(self):
-
-
         number = self.get_request_number()
-        
-        try:
-            self.number_info = self.api.get_number(number)
-            if hasattr(self.number_info,'error'):
-                self.number_info = None
-                return False
-            return True
-        except Exception, e:
-            # except (ClientError, AuthError, APIError):
-            self.number_info = None
-            return False
-
+        self.number_info = self.api.get_number(number)
 
     def get_number_information(self):
         return getattr(self, 'number_info', None)
@@ -129,6 +167,13 @@ class CP_ABDCPProcessor(ABDCPProcessor):
         service_status = self.get_query_service_status()
         return service_status == 'SUSPENDIDO'
 
+    def valid_type_service(self):
+        return self.get_query_line_type(self) == LINE_TYPE_FIX
+    
+    def valid_customer_id(self):
+        print self.get_query_identity_number()
+        return self.get_query_line_type(self) == LINE_TYPE_FIX
+
 
     def get_query_debt_amount(self):
         num_info = self.get_number_information()
@@ -137,21 +182,7 @@ class CP_ABDCPProcessor(ABDCPProcessor):
         else:
             return None
 
-
     def has_debt(self):
         return self.get_query_debt_amount() is not None
 
-    
-    def check_number(self):
-        requested_number = self.get_request_number()
-        itp_number = self.get_query_number().replace('-','')
-        return requested_number == itp_number
-
-    def check_line_type(self):
-        return "Se debe validar que el campo line_type tenga el valor Fijo."
-
-    def check_number_owner(self):
-        return "Se debe validar que el campo number este asociado al campo identity_number."
-
-    def check_mode(self):
-        return "Se debe validar que el campo mode tenga el valor PotsPago."
+ 

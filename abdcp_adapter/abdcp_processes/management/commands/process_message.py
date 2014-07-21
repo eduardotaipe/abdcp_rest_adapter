@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-
 import logging
+
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
 from abdcp_messages.models import ABDCPMessage
 from abdcp_processes import ABDCPProcessor
-from requests_portability.client import PortabilityClientError
+from abdcp_processes.cp import ECPC_ABDCPProcessor
 
 
 class Command(BaseCommand):
@@ -17,16 +17,15 @@ class Command(BaseCommand):
         return ABDCPProcessor.processor_factory(message)
 
     def handle(self, *args, **options):
-        logging.info("=== Iniciando Proceso de mensajes ABDCP ===")
+        logging.info("=== Begin ABDCP message process ===")
         messages = self.get_pending_messages()
 
         for message in messages:
             try:
                 processor = self.get_processor(message)
-                # processor.load_number_information()
+                processor.process()
+                logging.info("Message %s has been processed", message.message_id)
             except Exception, e:
-                logging.info("Error al procesar el mensaje" 
-                    + message.message_id)
-            # print processsor.generate_response()
-            # processor.process()
-        logging.info("=== Fin Proceso de mensajes ABDCP ===")
+                logging.info("Error: processing message "
+                    + message.message_id )
+        logging.info("=== End ABDCP message process ===")

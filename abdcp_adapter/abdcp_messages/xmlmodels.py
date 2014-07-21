@@ -67,7 +67,6 @@ class ABDCP_XML_Message(xmlmodels.XmlModel):
 
 
 # CP - Consulta Previa
-
 class CP_ABDCP_XML_Message(ABDCP_XML_Message):
 
     codigo_receptor = xmlmodels.XPathTextField(
@@ -128,3 +127,59 @@ class CP_ABDCP_XML_Message(ABDCP_XML_Message):
     cliente = xmlmodels.XPathTextField(
         '//CuerpoMensaje/ConsultaPrevia/Cliente'
     )
+
+# ECCP - Consulta Previa Envio Cedente
+class ECPC_ABDCP_XML_Message(ABDCP_XML_Message):
+
+    fecha_referencia_abdcp = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/ConsultaPreviaEnvioCedente/FechaReferenciaABDCP"
+    )
+    
+    numeracion = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/ConsultaPreviaEnvioCedente/Numeracion"
+    )
+    
+    codigo_receptor = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/ConsultaPreviaEnvioCedente/CodigoReceptor"
+    )
+    
+    codigo_cedente = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/ConsultaPreviaEnvioCedente/CodigoCedente"
+    )
+    
+    tipo_documento_identidad = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/ConsultaPreviaEnvioCedente/TipoDocumentoIdentidad"
+    )
+    
+    numero_documento_identidad = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/ConsultaPreviaEnvioCedente/NumeroDocumentoIdentidad"
+    )
+    
+    tipo_portabilidad = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/ConsultaPreviaEnvioCedente/TipoPortabilidad"
+    )
+    
+    nombre_contacto = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/ConsultaPreviaEnvioCedente/NombreContacto"
+    )
+    
+    email_contacto = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/ConsultaPreviaEnvioCedente/EmailContacto"
+    )
+    
+    telefono_contacto = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/ConsultaPreviaEnvioCedente/TelefonoContacto"
+    )
+    
+    fax_contacto = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/ConsultaPreviaEnvioCedente/FaxContacto"
+    )
+    
+    tipo_servicio = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/ConsultaPreviaEnvioCedente/TipoServicio"
+    )
+    
+    cliente = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/ConsultaPreviaEnvioCedente/Cliente"
+    )
+    

@@ -41,10 +41,12 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     # Dependencies
     'south',
+    'sequence_field',
     # Project
     'operators',
     'abdcp_messages',
-    'abdcp_processes'
+    'abdcp_processes',
+    
 )
 
 MIDDLEWARE_CLASSES = (
@@ -145,20 +147,16 @@ LOGGING = {
     },
 }
 
-SEQUENCE_FIELD_DEFAULT_VALUE = 1
-
-SEQUENCE_FIELD_ADMIN = True
-
-SEQUENCE_FIELD_DEFAULT_TEMPLATE = '%N'
-
-SEQUENCE_FIELD_DEFAULT_PATTERN =  r'(\d+)'
-
-SEQUENCE_FIELD_DEFAULT_EXPANDERS = "Already mentioned in the previous section."
+# SEQUENCE_FIELD_DEFAULT_VALUE = 1
+# SEQUENCE_FIELD_ADMIN = True
+# SEQUENCE_FIELD_DEFAULT_TEMPLATE = '%N'
+# SEQUENCE_FIELD_DEFAULT_PATTERN =  r'(\d+)'
+# SEQUENCE_FIELD_DEFAULT_EXPANDERS = "Already mentioned in the previous section."
 
 
-LOCAL_OPERADOR_ID = "45"
+LOCAL_OPERATOR_ID = "45"
 
-ABDCP_OPERADOR_ID = "00"
+ABDCP_OPERATOR_ID = "00"
 
 # Local settings
 try:

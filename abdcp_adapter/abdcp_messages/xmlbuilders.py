@@ -18,7 +18,6 @@ class BaseXMLBuilder(OrderedDict):
             xmlstr = utils.beautify_xmlstr(xmlstr)
         return xmlstr
 
-
     def as_xml_root_element(self):
         from lxml import etree
         return etree.XML(self.as_xml())
