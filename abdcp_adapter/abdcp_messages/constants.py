@@ -23,7 +23,7 @@ ABDCP_MESSAGE_TYPE_CHOICES = Enumeration([
     ('CP', 'CP', strings.ABDCP_MESSAGE_TYPE_CP),
     ('ANCP', 'ANCP', strings.ABDCP_MESSAGE_TYPE_ANCP),
     ('CPRABD', 'CPRABD', strings.ABDCP_MESSAGE_TYPE_CPRABD),
-    ('SPC', 'SPC', strings.ABDCP_MESSAGE_TYPE_SPC),
+    ('ECPC', 'ECPC', strings.ABDCP_MESSAGE_TYPE_ECPC),
     ('CPOCC', 'CPOCC', strings.ABDCP_MESSAGE_TYPE_CPOCC),
     ('CPAC', 'CPAC', strings.ABDCP_MESSAGE_TYPE_CPAC),
     ('CPPR', 'CPPR', strings.ABDCP_MESSAGE_TYPE_CPPR),
@@ -45,7 +45,8 @@ ABDCP_MESSAGE_TYPE_CHOICES = Enumeration([
     ('AR', 'AR', strings.ABDCP_MESSAGE_TYPE_AR),
     ('DR', 'DR', strings.ABDCP_MESSAGE_TYPE_DR),
     ('NI', 'NI', strings.ABDCP_MESSAGE_TYPE_NI),
-    ('NE', 'NE', strings.ABDCP_MESSAGE_TYPE_NE)
+    ('NE', 'NE', strings.ABDCP_MESSAGE_TYPE_NE),
+    ('ECPC', 'ECPC', strings.ABDCP_MESSAGE_TYPE_NE)
 ])
 
 ABDCP_MESSAGE_TYPES_BY_PROCESS_TYPE = OrderedDict([

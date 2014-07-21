@@ -25,3 +25,6 @@ ABDCP_MESSAGE_XSD_FILEPATH = getattr(
         ABDCP_MESSAGE_XSD_FILENAME
     )
 )
+
+ABDCP_ENDPOINT = '</path/to/wsdl>'
+

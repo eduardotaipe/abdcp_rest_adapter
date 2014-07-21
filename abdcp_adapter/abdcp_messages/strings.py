@@ -11,7 +11,7 @@ ABDCP_MESSAGE_TRANSACTION_ID = _(u'ID de transacción')
 ABDCP_MESSAGE_REQUEST_DOCUMENT = _(u'Documento con solicitud')
 ABDCP_MESSAGE_RESPONSE_DOCUMENT = _(u'Documento con respuesta')
 ABDCP_MESSAGE_PROCESS_TYPE = _(u'Tipo de proceso')
-ABDCP_MESSAGE_MESSAGE_TYPE = _(u'Tipo de proceso')
+ABDCP_MESSAGE_MESSAGE_TYPE = _(u'Tipo de Mensaje')
 ABDCP_MESSAGE_STATED_CREATION = _(u'Fecha y hora de creación indicada')
 ABDCP_MESSAGE_CREATED = _(u'Fecha y hora de creación')
 ABDCP_MESSAGE_RESPONDED = _(u'Fecha y hora de respuesta')
@@ -44,7 +44,7 @@ ABDCP_PROCESS_05_CP = _(
 ABDCP_MESSAGE_TYPE_CP = _(u'Consulta Previa')
 ABDCP_MESSAGE_TYPE_ANCP = _(u'Asignación de número de consulta previa')
 ABDCP_MESSAGE_TYPE_CPRABD = _(u'Consulta previa rechazada por el ABDCP')
-ABDCP_MESSAGE_TYPE_SPC = _(u'Envío de consulta previa al cedente')
+ABDCP_MESSAGE_TYPE_ECPC = _(u'Envío de consulta previa al cedente')
 
 ABDCP_MESSAGE_TYPE_CPOCC = _(
     u'Consulta previa objeción del concesionario cedente'
@@ -86,6 +86,8 @@ ABDCP_MESSAGE_TYPE_AR = _(u'Retorno de número aceptado')
 ABDCP_MESSAGE_TYPE_DR = _(u'Denegación de retorno')
 ABDCP_MESSAGE_TYPE_NI = _(u'No integridad')
 ABDCP_MESSAGE_TYPE_NE = _(u'Notificación de error')
+
+
 
 ABDCP_MESSAGE_PREVIOUS_CONSULT_ACCEPT = _(
     U'Previous Consultation Donor Acceptance Response'
