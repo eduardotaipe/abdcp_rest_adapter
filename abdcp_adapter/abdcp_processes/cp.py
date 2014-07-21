@@ -73,9 +73,12 @@ class ECPC_ABDCPProcessor(ABDCPProcessor):
 
     def phone_not_owned(self):
         number_info = self.get_number_information()
+        if not hasattr(number_info, 'error'):
+            return False
         return number_info.error.code == '1000'
 
     def get_ABDCP_code(self):
+        
         if self.get_number_information() is None:
             raise Exception("Fatal error: no number info")
 
@@ -91,7 +94,7 @@ class ECPC_ABDCPProcessor(ABDCPProcessor):
         if not self.valid_customer_id():
             return constants.ABDCP_OC_INVALID_ID_CUSTOMER
 
-        if not self.has_debt():
+        if self.has_debt():
             return constants.ABDCP_OC_HAS_DEBT
 
         return "ok"
@@ -145,12 +148,12 @@ class ECPC_ABDCPProcessor(ABDCPProcessor):
 
     def get_query_identity_number(self):
         num_info = self.get_number_information()
-        return num_info.customer.customer_identity.identity_number
+        return num_info.customer.identity_number
 
 
     def get_query_identity_document_type(self):
         num_info = self.get_number_information()
-        return num_info.customer.customer_identity.document_type
+        return num_info.customer.document_type
 
 
     def get_query_mode(self):
@@ -168,21 +171,24 @@ class ECPC_ABDCPProcessor(ABDCPProcessor):
         return service_status == 'SUSPENDIDO'
 
     def valid_type_service(self):
-        return self.get_query_line_type(self) == LINE_TYPE_FIX
+        return self.get_query_line_type() == constants.LINE_TYPE_FIX
     
     def valid_customer_id(self):
-        print self.get_query_identity_number()
-        return self.get_query_line_type(self) == LINE_TYPE_FIX
+        num_info = self.get_number_information()
+        if(num_info.customer is None):
+            return False
+
+        req_identity_number = self.get_request_identity_number()
+        get_identity_number = self.get_query_identity_number()
+        return req_identity_number == get_identity_number
 
 
     def get_query_debt_amount(self):
         num_info = self.get_number_information()
-        if num_info.customer.debt is not None:
+        if num_info.customer.debt.amount is not None:
             return num_info.customer.debt.amount
         else:
             return None
 
     def has_debt(self):
         return self.get_query_debt_amount() is not None
-
- 
