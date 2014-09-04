@@ -53,11 +53,15 @@ class ABDCP_XML_Message(xmlmodels.XmlModel):
         except ABDCPMessage.DoesNotExist:
             return None
 
-    def get_message_creation_date_as_datetime(self):
-        src = self.message_creation_date
-        value = datetime.datetime.strptime(src,'%Y%m%d%H%M%S')
+    @classmethod
+    def abdcp_date_as_datetime(cls, value):
+        value = datetime.datetime.strptime(value,'%Y%m%d%H%M%S')
         value = value.replace(tzinfo=pytz.timezone(settings.TIME_ZONE))
         return value
+
+    def get_message_creation_date_as_datetime(self):
+        value = self.message_creation_date
+        return ABDCP_XML_Message.abdcp_date_as_datetime(value)
 
     def get_process_type(self):
         try:
@@ -183,3 +187,62 @@ class ECPC_ABDCP_XML_Message(ABDCP_XML_Message):
         "//CuerpoMensaje/ConsultaPreviaEnvioCedente/Cliente"
     )
     
+# ESC - Envio Solicitud Cedente
+class ESC_ABDCP_XML_Message(ABDCP_XML_Message):
+
+    fecha_referencia = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/EnvioSolicitudCedente/FechaReferenciaABDCP'
+    )
+
+    numeracion = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/EnvioSolicitudCedente/Numeracion'
+    )
+
+    codigo_receptor = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/EnvioSolicitudCedente/CodigoReceptor'
+    )
+
+    codigo_cedente = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/EnvioSolicitudCedente/CodigoCedente'
+    )
+
+    tipo_documento_identidad = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/EnvioSolicitudCedente/TipoDocumentoIdentidad'
+    )
+    
+    numero_documento_identidad = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/EnvioSolicitudCedente/NumeroDocumentoIdentidad'
+    )
+
+    tipo_portabilidad = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/EnvioSolicitudCedente/TipoPortabilidad'
+    )
+
+    nombre_contacto = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/EnvioSolicitudCedente/NombreContacto'
+    )
+
+    email_contacto = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/EnvioSolicitudCedente/EmailContacto'
+    )
+
+    telefono_contacto = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/EnvioSolicitudCedente/TelefonoContacto'
+    )
+
+    fax_contacto = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/EnvioSolicitudCedente/FaxContacto'
+    )
+
+    tipo_servicio = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/EnvioSolicitudCedente/TipoServicio'
+    )
+
+    cliente = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/EnvioSolicitudCedente/Cliente'
+    )
+
+    def get_abdcp_reference_date_as_datetime(self):
+        value = self.fecha_referencia
+        return ABDCP_XML_Message.abdcp_date_as_datetime(value)
+
