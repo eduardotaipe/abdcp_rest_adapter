@@ -103,7 +103,3 @@ class ABDCPProcessor(object):
             return klass(message=message)
         except (ValueError,ImportError):
             return None
-
-        
-
-

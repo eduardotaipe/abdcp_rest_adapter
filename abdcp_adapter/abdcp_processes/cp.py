@@ -48,7 +48,7 @@ class ECPC_ABDCPProcessor(ABDCPProcessor):
     def get_common_data(self):
         result = {
             'message_id' : self.generate_message_id(),
-            'process_id' : self.generate_process_id(),
+            'process_id' : self.xmlmodel.transaction_id,
             'sender_code' : settings.LOCAL_OPERATOR_ID,
             'recipient_code' : settings.ABDCP_OPERATOR_ID,
         }

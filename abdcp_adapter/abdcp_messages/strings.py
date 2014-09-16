@@ -90,8 +90,10 @@ ABDCP_MESSAGE_TYPE_NE = _(u'Notificación de error')
 
 
 ABDCP_MESSAGE_PREVIOUS_CONSULT_ACCEPT = _(
-    U'Previous Consultation Donor Acceptance Response'
+    u'Previous Consultation Donor Acceptance Response'
 )
+
+ABDCP_MESSAGE_PORT_REQUEST_ACCEPT = _(u'Donor Port Acceptance Response')
 
 # Validators
 

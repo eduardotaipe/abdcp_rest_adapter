@@ -7,6 +7,7 @@ from django.conf import settings
 from abdcp_messages.models import ABDCPMessage
 from abdcp_processes import ABDCPProcessor
 from abdcp_processes.cp import ECPC_ABDCPProcessor
+from abdcp_processes.sp import ESC_ABDCPProcessor
 
 
 class Command(BaseCommand):
@@ -19,7 +20,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         logging.info("=== Begin ABDCP message process ===")
         messages = self.get_pending_messages()
-
+        
         for message in messages:
             try:
                 processor = self.get_processor(message)

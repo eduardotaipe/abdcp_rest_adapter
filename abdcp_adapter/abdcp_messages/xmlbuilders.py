@@ -66,10 +66,10 @@ class ABDCPXMLBuilder(BaseXMLBuilder):
         return self['MensajeABDCP']['CuerpoMensaje']
 
 
-    def build_payload(self, value=OrderedDict()):
+    def build_payload(self):
         message_body = self.get_message_body()
         if hasattr(self, 'payload_name'):
-            message_body[self.payload_name] = value
+            message_body[self.payload_name] = OrderedDict()
 
 
     def get_payload_name(self):
@@ -147,3 +147,40 @@ class CPOCC_XMLBuilder(ABDCPXMLBuilder):
 
             if moneda is not None:
                 payload['Moneda'] = moneda
+
+
+class SAC_XMLBuilder(ABDCPXMLBuilder):
+
+    payload_name = 'SolicitudAceptadaCedente'
+
+    def __init__(self, **params):
+        params['message_type'] = 'SAC'
+
+        super(SAC_XMLBuilder, self).__init__(**params)
+        
+        observaciones = params.get('observaciones')
+
+        payload = self.get_payload()
+
+        if payload is not None:
+            payload['Observaciones'] = observaciones
+
+class OCC_XMLBuilder(ABDCPXMLBuilder):
+
+    payload_name = 'ConsultaPreviaObjecionConcesionarioCedente'
+
+    def __init__(self, **params):
+
+        params['message_type'] = 'OCC'
+
+        super(OCC_XMLBuilder, self).__init__(**params)
+        
+        causa_objecion = params.get('causa_objecion')
+        numeracion = params.get('numeracion')
+
+        payload = self.get_payload()
+
+        if payload is not None:
+            payload['CausaObjecion'] = causa_objecion
+            payload['Numeracion'] = numeracion
+
