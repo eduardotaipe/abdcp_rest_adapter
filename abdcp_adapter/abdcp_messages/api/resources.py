@@ -22,6 +22,8 @@ from abdcp_messages.models import ABDCPMessage
 from abdcp_messages import strings
 from abdcp_messages import utils
 
+from abdcp_processes.tasks import process_message
+
 class ABDCPMessageCreation(ControllerResourceView):
 
     def get_document(self):
@@ -220,6 +222,7 @@ class ABDCPMessageCreation(ControllerResourceView):
         # Everything seems to be OK, lets create the message
         if self.create_message():
             # Message created
+            process_message.delay(self.message_id)
             return self.no_content()
         else:
             # Some sort of error has happened

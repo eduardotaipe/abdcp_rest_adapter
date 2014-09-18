@@ -50,7 +50,7 @@ class PEP_ABDCPProcessor(ABDCPProcessor):
         return "response PEP"
 
     def queue_notification(self):
-        data_string = json.dumps(data)
+        send_email.delay(data)
 
     def process(self):
         super(PEP_ABDCPProcessor,self).process()
