@@ -49,7 +49,7 @@ class ABDCPMessage(models.Model):
     transaction_id = models.CharField(
         verbose_name=strings.ABDCP_MESSAGE_TRANSACTION_ID,
         max_length=constants.ABDCP_TRANSACTION_ID_LENGTH,
-        unique=True
+        unique=False
     )
 
     request_document = models.TextField(
