@@ -164,4 +164,4 @@ try:
 except ImportError:
     pass
 
-
+BROKER_URL = 'beanstalk://localhost:11300'
