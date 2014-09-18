@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import logging
-import beanstalkc
 import json
 
 from django.conf import settings
@@ -51,15 +50,9 @@ class PEP_ABDCPProcessor(ABDCPProcessor):
         return "response PEP"
 
     def queue_notification(self):
-        import ipdb
-        ipdb.set_trace()
-        data="ohoho"
         data_string = json.dumps(data)
 
     def process(self):
-        import ipdb
-        ipdb.set_trace()
-        
         super(PEP_ABDCPProcessor,self).process()
         self.queue_notification()
 
