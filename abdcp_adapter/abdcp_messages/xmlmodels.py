@@ -246,3 +246,10 @@ class ESC_ABDCP_XML_Message(ABDCP_XML_Message):
         value = self.fecha_referencia
         return ABDCP_XML_Message.abdcp_date_as_datetime(value)
 
+
+
+# PEP - Programacion de Ejecucion Portabilidad
+class PEP_ABDCP_XML_Message(ABDCP_XML_Message):
+    cliente = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/ProgramadaEjecutarPortabilidad/FechaEjecucionPortabilidad'
+    )
