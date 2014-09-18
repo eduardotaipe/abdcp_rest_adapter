@@ -27,6 +27,5 @@ class Command(BaseCommand):
                 processor.process()
                 logging.info("Message %s has been processed", message.message_id)
             except Exception, e:
-                logging.info("Error: processing message "
-                    + message.message_id )
+                logging.info("Error: processing message %s %s" % (message.message_id,e))
         logging.info("=== End ABDCP message process ===")

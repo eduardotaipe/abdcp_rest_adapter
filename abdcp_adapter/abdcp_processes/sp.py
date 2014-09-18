@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import beanstalkc
+import json
 
 from django.conf import settings
 
 from abdcp_messages import strings
 from abdcp_messages.models import ABDCPMessage
-from abdcp_messages.xmlmodels import ESC_ABDCP_XML_Message
+from abdcp_messages.xmlmodels import ESC_ABDCP_XML_Message,PEP_ABDCP_XML_Message
 from abdcp_messages.xmlbuilders import SAC_XMLBuilder,OCC_XMLBuilder
 from abdcp_messages import constants
 
@@ -39,3 +41,25 @@ class ESC_ABDCPProcessor(ECPC_ABDCPProcessor):
 
         response = OCC_XMLBuilder(**common_data)
         return response.as_xml()
+
+
+class PEP_ABDCPProcessor(ABDCPProcessor):
+
+    xmlmodel_class = PEP_ABDCP_XML_Message
+
+    def generate_response(self):
+        return "response PEP"
+
+    def queue_notification(self):
+        import ipdb
+        ipdb.set_trace()
+        data="ohoho"
+        data_string = json.dumps(data)
+
+    def process(self):
+        import ipdb
+        ipdb.set_trace()
+        
+        super(PEP_ABDCPProcessor,self).process()
+        self.queue_notification()
+
