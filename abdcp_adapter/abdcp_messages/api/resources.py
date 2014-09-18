@@ -44,7 +44,7 @@ class ABDCPMessageCreation(ControllerResourceView):
     def check_request_document_structure(self):
         doc = self.get_document()
         if doc is not None:
-            REQUIRED_KEYS = ['userID', 'password', 'xmlMsg', 'attachedDoc']
+            REQUIRED_KEYS = ['userID', 'password', 'xmlMsg']
             for k in REQUIRED_KEYS:
                 if k not in self.doc:
                     return False
@@ -138,6 +138,7 @@ class ABDCPMessageCreation(ControllerResourceView):
             obj = utils.create_abdcp_message_from_xml_string(xmlstr)
             return True
         except (OperationalError, IntegrityError) as e:
+            print e
             self.message_creation_errors = [e]
             return False
 
