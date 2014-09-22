@@ -192,3 +192,9 @@ class ECPC_ABDCPProcessor(ABDCPProcessor):
 
     def has_debt(self):
         return self.get_query_debt_amount() is not None
+
+    def process(self):
+        self.process_response()
+        self.save_response()
+        self.mark_responded()
+

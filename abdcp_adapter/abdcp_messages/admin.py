@@ -6,7 +6,7 @@ from abdcp_messages.models import ABDCPMessage
 class ABDCPMessageAdmin(admin.ModelAdmin):
 
     list_display = (
-        'message_id', 'sender', 'recipient', 'transaction_id', 'created',
+        'message_id', 'sender', 'recipient', 'transaction_id', 'message_type', 'created',
     )
 
     list_filter = ('sender', )

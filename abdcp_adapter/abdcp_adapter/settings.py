@@ -158,10 +158,17 @@ LOCAL_OPERATOR_ID = "45"
 
 ABDCP_OPERATOR_ID = "00"
 
+TELEPHONY_OPERATOR_EMAIL = ""
+WEBMASTER_EMAIL = ""
+ITP_CONTACT_EMAIL = ""
+SMTP_SERVER = ""
+
+
+
+
 # Local settings
 try:
     from local_settings import *
 except ImportError:
     pass
 
-BROKER_URL = 'beanstalk://localhost:11300'

@@ -250,6 +250,21 @@ class ESC_ABDCP_XML_Message(ABDCP_XML_Message):
 
 # PEP - Programacion de Ejecucion Portabilidad
 class PEP_ABDCP_XML_Message(ABDCP_XML_Message):
-    cliente = xmlmodels.XPathTextField(
+    fecha_ejecucion_portabilidad = xmlmodels.XPathTextField(
         '//CuerpoMensaje/ProgramadaEjecutarPortabilidad/FechaEjecucionPortabilidad'
+    )
+
+    def get_scheduling_for_port_date_as_datetime(self):
+        value = self.fecha_ejecucion_portabilidad
+        return ABDCP_XML_Message.abdcp_date_as_datetime(value)
+
+# SPR - Solicitud Procedente
+class SPR_ABDCP_XML_Message(ABDCP_XML_Message):
+
+    fecha_limite_programacion_portabilidad = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/SolicitudProcedente/FechaLimiteProgramacionPortabilidad'
+    )
+
+    fecha_referencia_abdcp = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/SolicitudProcedente/FechaReferenciaABDCP'
     )

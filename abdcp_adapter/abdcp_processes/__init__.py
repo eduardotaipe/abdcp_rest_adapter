@@ -63,6 +63,8 @@ class ABDCPProcessor(object):
     def generate_response(self):
         pass
 
+    def notify(self):
+        pass
 
     def mark_responded(self, commit=True):
         if self.response is not None:
@@ -81,10 +83,7 @@ class ABDCPProcessor(object):
         self.set_response(response)
 
     def process(self):
-        self.process_response()
-        self.save_response()
-        self.mark_responded()
-        
+        pass
 
     @classmethod
     def processor_factory(cls,message):

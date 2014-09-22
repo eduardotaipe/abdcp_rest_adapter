@@ -1,12 +1,11 @@
 import logging
-
-from abdcp_messages.models import ABDCPMessage
-from abdcp_processes import ABDCPProcessor
-from abdcp_processes.cp import ECPC_ABDCPProcessor
-from abdcp_processes.sp import ESC_ABDCPProcessor
+from django.core.mail import send_mail
 
 from celery import shared_task
 
+from abdcp_messages.models import ABDCPMessage
+from abdcp_processes import ABDCPProcessor
+from abdcp_adapter import settings
 
 @shared_task
 def process_message(message_id):
@@ -20,8 +19,7 @@ def process_message(message_id):
         logging.info("Error: processing message %s %s" % (message.message_id,e))
     logging.info("=== End ABDCP message process ===")
 
-
 @shared_task
-def send_email(data):
-    pass
-
+def send_email(info):
+    send_mail(info["subject"], info["body"], "telefonia@rcp.pe",
+    [info["to"]], fail_silently=False)
