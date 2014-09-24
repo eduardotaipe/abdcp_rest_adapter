@@ -268,3 +268,45 @@ class SPR_ABDCP_XML_Message(ABDCP_XML_Message):
     fecha_referencia_abdcp = xmlmodels.XPathTextField(
         '//CuerpoMensaje/SolicitudProcedente/FechaReferenciaABDCP'
     )
+
+    def get_port_scheduling_limit_date_as_datetime(self):
+        value = self.fecha_limite_programacion_portabilidad
+        return ABDCP_XML_Message.abdcp_date_as_datetime(value)
+
+    def get_abdcp_referenced_date_as_datetime(self):
+        value = self.fecha_referencia_abdcp
+        return ABDCP_XML_Message.abdcp_date_as_datetime(value)
+
+# SR Solicitud Retorno
+class SR_ABDCP_XML_Message(ABDCP_XML_Message):
+
+    observaciones = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/SolicitudRetorno/Observaciones'
+    )
+    codigo_receptor = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/SolicitudRetorno/CodigoReceptor'
+    )
+    codigo_cedente = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/SolicitudRetorno/CodigoCedente'
+    )
+    numeracion_a_retornar = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/SolicitudRetorno/NumeracionARetornar'
+    )
+    fecha_ejecucion_retorno = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/SolicitudRetorno/FechaEjecucionRetorno'
+    )
+    motivo_retorno = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/SolicitudRetorno/MotivoRetorno'
+    )
+    nombre_contacto = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/SolicitudRetorno/NombreContacto'
+    )
+    email_contacto = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/SolicitudRetorno/EmailContacto'
+    )
+    telefono_contacto = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/SolicitudRetorno/TelefonoContacto'
+    )
+    fax_contacto = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/SolicitudRetorno/FaxContacto'
+    )

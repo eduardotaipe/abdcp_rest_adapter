@@ -140,7 +140,6 @@ class ABDCPMessageCreation(ControllerResourceView):
             obj = utils.create_abdcp_message_from_xml_string(xmlstr)
             return True
         except (OperationalError, IntegrityError) as e:
-            print e
             self.message_creation_errors = [e]
             return False
 

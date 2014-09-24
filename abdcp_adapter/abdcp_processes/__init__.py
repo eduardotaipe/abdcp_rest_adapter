@@ -11,6 +11,7 @@ from requests_portability.client import PortabilityAuthError as AuthError
 
 from abdcp_adapter.utils import load_class
 from abdcp_messages import constants
+
 class ABDCPProcessor(object):
 
     def __init__(self, message=None):
@@ -18,7 +19,6 @@ class ABDCPProcessor(object):
         self.set_xmlmodel()
         self.set_response(None)
         self.set_api_client()
-
 
     def set_api_client(self):
         try:
@@ -61,10 +61,10 @@ class ABDCPProcessor(object):
 
 
     def generate_response(self):
-        pass
+        raise NotImplementedError("child classes must implement this method")
 
     def notify(self):
-        pass
+        raise NotImplementedError("child classes must implement this method")
 
     def mark_responded(self, commit=True):
         if self.response is not None:
@@ -83,8 +83,18 @@ class ABDCPProcessor(object):
         self.set_response(response)
 
     def process(self):
-        pass
+        raise NotImplementedError("child classes must implement this method")
 
+    def get_header_data(self):
+        result = {
+            'message_id' : self.generate_message_id(),
+            'process_id' : self.xmlmodel.transaction_id,
+            'sender_code' : settings.LOCAL_OPERATOR_ID,
+            'recipient_code' : settings.ABDCP_OPERATOR_ID,
+        }
+        return result
+
+        
     @classmethod
     def processor_factory(cls,message):
         process_type = \

@@ -23,18 +23,6 @@ class ECPC_ABDCPProcessor(ABDCPProcessor):
 
     xmlmodel_class = ECPC_ABDCP_XML_Message
 
-    def generate_process_id(self):
-        process_type = self.message.process_type
-        message_type = self.message.message_type
-        return Sequence.next(
-            message_type,
-            template='%(OO)s%Y%m%d%(TI)s%NNNNN', 
-            params={
-                'OO': settings.LOCAL_OPERATOR_ID,
-                'TI': process_type
-            }
-        )
-    
     def generate_message_id(self):
         message_type = self.message.message_type
         return Sequence.next(
@@ -45,17 +33,8 @@ class ECPC_ABDCPProcessor(ABDCPProcessor):
             }
         )
 
-    def get_common_data(self):
-        result = {
-            'message_id' : self.generate_message_id(),
-            'process_id' : self.xmlmodel.transaction_id,
-            'sender_code' : settings.LOCAL_OPERATOR_ID,
-            'recipient_code' : settings.ABDCP_OPERATOR_ID,
-        }
-        return result
-
     def get_response_ok(self):
-        common_data = self.get_common_data()
+        common_data = self.get_header_data()
         common_data["numeracion"] = self.get_request_number()
         common_data["observaciones"] = strings.\
             ABDCP_MESSAGE_PREVIOUS_CONSULT_ACCEPT
@@ -64,7 +43,7 @@ class ECPC_ABDCPProcessor(ABDCPProcessor):
         return response.as_xml()
 
     def get_response_error(self,error_code):
-        common_data = self.get_common_data()
+        common_data = self.get_header_data()
         common_data["causa_objecion"] = error_code
         common_data["numeracion"] = self.get_request_number()
 
