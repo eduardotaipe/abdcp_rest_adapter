@@ -1,5 +1,4 @@
 import logging
-from django.core.mail import send_mail
 
 from celery import shared_task
 
@@ -40,8 +39,3 @@ def process_message(message_id):
     logging.info("=== End ABDCP message process ===")
 
     return result
-
-@shared_task
-def send_email(info):
-    send_mail(info["subject"], info["body"], settings.SENDER_EMAIL,
-    [info["to"]], fail_silently=False)

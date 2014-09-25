@@ -11,6 +11,7 @@ from requests_portability.client import PortabilityAuthError as AuthError
 
 from abdcp_adapter.utils import load_class
 from abdcp_messages import constants
+from abdcp_messages.tasks import send_email
 
 class ABDCPProcessor(object):
 
@@ -51,14 +52,11 @@ class ABDCPProcessor(object):
         else:
             self.xmlmodel = None
 
-
     def get_xmlmodel_class(self):
         return getattr(self, 'xmlmodel_class', None)
 
-
     def get_request_as_dict(self):
         return self.message.get_request_as_dict()
-
 
     def generate_response(self):
         raise NotImplementedError("child classes must implement this method")
@@ -93,7 +91,6 @@ class ABDCPProcessor(object):
             'recipient_code' : settings.ABDCP_OPERATOR_ID,
         }
         return result
-
         
     @classmethod
     def processor_factory(cls,message):
@@ -112,3 +109,28 @@ class ABDCPProcessor(object):
             return klass(message=message)
         except (ValueError,ImportError):
             return None
+
+class Notifier_ABDCPProcessor(ABDCPProcessor):
+    
+    def get_first_message_ESC(self):
+        result = ABDCPMessage.objects.filter(
+            transaction_id=self.message.transaction_id,
+            message_type=constants.ABDCP_MESSAGE_TYPE_ESC
+        )
+
+        if result.count()==0:
+            raise Exception("ESC message doesn't exist.")
+
+        xmlstr = result[0].request_document
+        esc = ESC_ABDCP_XML_Message.create_from_string(xmlstr)
+        return esc
+
+    def get_email_info(self):
+        raise NotImplementedError("child classes must implement this method")
+
+    def notify(self):
+        info = self.get_email_info()
+        send_email.delay(info)
+
+    def process(self):
+        self.notify()
