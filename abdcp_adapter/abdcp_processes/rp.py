@@ -17,20 +17,19 @@ class SR_ABDCPProcessor(Notifier_ABDCPProcessor):
         info["subject"] = strings.ABDCP_MESSAGE_TYPE_SR +": " +\
             xmlmodel.numeracion_a_retornar
         info["to"] = settings.TELEPHONY_OPERATOR_EMAIL
+        info["phone_number"] = xmlmodel.numeracion_a_retornar
+        info["process_name"] = strings.ABDCP_MESSAGE_TYPE_SR
 
-        body  = "%s\n" % strings.ABDCP_MESSAGE_TYPE_SR
-        
-        body += "observaciones:%s\n" % xmlmodel.observaciones
-        body += "codigo_receptor:%s\n" % xmlmodel.codigo_receptor
-        body += "codigo_cedente:%s\n" % xmlmodel.codigo_cedente
-        body += "numeracion_a_retornar:%s\n" % xmlmodel.numeracion_a_retornar
-        body += "fecha_ejecucion_retorno:%s\n" % xmlmodel.fecha_ejecucion_retorno
-        body += "motivo_retorno:%s\n" % xmlmodel.motivo_retorno
-        body += "nombre_contacto:%s\n" % xmlmodel.nombre_contacto
-        body += "email_contacto:%s\n" % xmlmodel.email_contacto
-        body += "telefono_contacto:%s\n" % xmlmodel.telefono_contacto
-        body += "fax_contacto:%s\n" % xmlmodel.fax_contacto
-
-        info["body"] = body
+        info["list_data"] = {}
+        info["list_data"]["observaciones"] = xmlmodel.observaciones
+        info["list_data"]["codigo_receptor"] = xmlmodel.codigo_receptor
+        info["list_data"]["codigo_cedente"] = xmlmodel.codigo_cedente
+        info["list_data"]["numeracion_a_retornar"] = xmlmodel.numeracion_a_retornar
+        info["list_data"]["fecha_ejecucion_retorno"] = xmlmodel.fecha_ejecucion_retorno
+        info["list_data"]["motivo_retorno"] = xmlmodel.motivo_retorno
+        info["list_data"]["nombre_contacto"] = xmlmodel.nombre_contacto
+        info["list_data"]["email_contacto"] = xmlmodel.email_contacto
+        info["list_data"]["telefono_contacto"] = xmlmodel.telefono_contacto
+        info["list_data"]["fax_contacto"] = xmlmodel.fax_contacto
 
         return info

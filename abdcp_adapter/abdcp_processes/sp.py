@@ -58,14 +58,12 @@ class PEP_ABDCPProcessor(Notifier_ABDCPProcessor):
         info = {}
         info["subject"] = strings.ABDCP_MESSAGE_TYPE_PEP +": "+ esc.numeracion
         info["to"] = settings.TELEPHONY_OPERATOR_EMAIL
-        info["phone"] = esc.numeracion
-        info["client_name"] = esc.nombre_contacto
-        info["portablity_day"] = schedule_date
-
-        body  = "%s\n" % strings.ABDCP_MESSAGE_TYPE_PEP
-        body += "cliente :%s\n" % info["client_name"]
-        body += "telefono :%s\n" % info["phone"]
-        body += "fecha :%s\n" % info["portablity_day"]
+        info["phone_number"] = esc.numeracion
+        info["process_name"] = strings.ABDCP_MESSAGE_TYPE_PEP
+        
+        info["list_data"]={}
+        info["list_data"]["client_name"] = esc.nombre_contacto
+        info["list_data"]["portablity_day"] = schedule_date
         info["body"] = body
         return info
 
@@ -81,14 +79,11 @@ class SPR_ABDCPProcessor(Notifier_ABDCPProcessor):
         info = {}
         info["subject"] = strings.ABDCP_MESSAGE_TYPE_SPR +": "+ esc.numeracion
         info["to"] = settings.TELEPHONY_OPERATOR_EMAIL
-        info["phone"] = esc.numeracion
+        info["phone_number"] = esc.numeracion
+        info["process_name"] = strings.ABDCP_MESSAGE_TYPE_SPR
+
+        info["list_data"]={}
         info["client_name"] = esc.nombre_contacto
         info["portablity_day"] = fecha_limite_programacion_portabilidad
-
-        body  = "%s\n" % strings.ABDCP_MESSAGE_TYPE_SPR
-        body += "cliente :%s\n" % info["client_name"]
-        body += "telefono :%s\n" % info["phone"]
-        body += "fecha :%s\n" % info["portablity_day"]
-        info["body"] = body
 
         return info

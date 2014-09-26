@@ -153,7 +153,6 @@ LOGGING = {
 # SEQUENCE_FIELD_DEFAULT_PATTERN =  r'(\d+)'
 # SEQUENCE_FIELD_DEFAULT_EXPANDERS = "Already mentioned in the previous section."
 
-
 LOCAL_OPERATOR_ID = "45"
 
 ABDCP_OPERATOR_ID = "00"
@@ -167,6 +166,10 @@ CELERY_COUNTDOWN = 60
 CELERY_MAX_RETRIES = 60*4
 
 SENDER_EMAIL = ""
+
+import os
+TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), '..', 'templates').replace('\\','/'),)
+
 
 # Local settings
 try:
