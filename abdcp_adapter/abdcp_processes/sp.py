@@ -14,6 +14,7 @@ from abdcp_messages.xmlmodels import SPR_ABDCP_XML_Message
 from abdcp_messages.xmlbuilders import SAC_XMLBuilder,OCC_XMLBuilder
 
 from abdcp_processes import ABDCPProcessor
+from abdcp_processes import Notifier_ABDCPProcessor
 from abdcp_processes.cp import ECPC_ABDCPProcessor
 
 from requests_portability.client import PortabilityClientError as ClientError
