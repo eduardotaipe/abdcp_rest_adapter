@@ -310,3 +310,33 @@ class SR_ABDCP_XML_Message(ABDCP_XML_Message):
     fax_contacto = xmlmodels.XPathTextField(
         '//CuerpoMensaje/SolicitudRetorno/FaxContacto'
     )
+
+# NI No integridad
+class NI_ABDCP_XML_Message(ABDCP_XML_Message):
+
+    numero_secuencial_solicitud = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/NoIntegridad/NumeroSecuencialSolicitud'
+    )
+    identificador_mensaje_erroneo = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/NoIntegridad/IdentificadorMensajeErroneo'
+    )
+    causa_no_integridad = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/NoIntegridad/CausaNoIntegridad'
+    )
+    fecha_recepcion_mensaje_anterior = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/NoIntegridad/FechaRecepcionMensajeAnterior'
+    )
+
+    def get_last_message_reception_date_as_datetime(self):
+        value = self.fecha_recepcion_mensaje_anterior
+        return ABDCP_XML_Message.abdcp_date_as_datetime(value)
+
+# NE Notificacion de Error
+class NE_ABDCP_XML_Message(ABDCP_XML_Message):
+
+    codigo_error = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/NotificacionError/CodigoError'
+    )
+    descripcion_codigo_error = xmlmodels.XPathTextField(
+        '//CuerpoMensaje/NotificacionError/DescripcionCodigoError'
+    )
