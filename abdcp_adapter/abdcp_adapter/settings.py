@@ -92,7 +92,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# Portability API
+# Abdcp Client WebService RestFull
+ABDCP_CLIENT_REST_ADAPTER_ENDPOINT = 'http://abdcp-client-rest-adpater.com/infoductosrespond/rest/infoductos/receivemessage'
+ABDCP_CLIENT_REST_ADAPTER_VERIFY_SSL = True
+ABDCP_CLIENT_REST_ADAPTER_USR = 'user'
+ABDCP_CLIENT_REST_ADAPTER_PWD = 'password'
+
+#Portability API
 PORTABILITY_API_BASE_URL = 'http://portability-api-server.com/path/to/api'
 PORTABILITY_API_KEY = '<some API key>'
 
@@ -160,16 +166,14 @@ ABDCP_OPERATOR_ID = "00"
 TELEPHONY_OPERATOR_EMAIL = ""
 PORTABILITY_SUPPORT_EMAIL = ""
 ITP_CONTACT_EMAIL = ""
+SENDER_EMAIL = ""
 
 # 4 hours every minute
 CELERY_COUNTDOWN = 60
 CELERY_MAX_RETRIES = 60*4
 
-SENDER_EMAIL = ""
-
 import os
 TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), '..', 'templates').replace('\\','/'),)
-
 
 # Local settings
 try:
