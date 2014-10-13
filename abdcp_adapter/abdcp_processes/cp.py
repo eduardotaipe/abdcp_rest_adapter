@@ -9,6 +9,7 @@ from abdcp_messages.models import ABDCPMessage
 from abdcp_messages.xmlmodels import ECPC_ABDCP_XML_Message
 from abdcp_messages.xmlbuilders import CPAC_XMLBuilder,CPOCC_XMLBuilder
 from abdcp_messages import constants
+from abdcp_messages.tasks import send_message
 
 from abdcp_processes import ABDCPProcessor
 
@@ -18,7 +19,6 @@ from requests_portability.client import PortabilityAuthError as AuthError
 
 from sequence_field.models import Sequence
 
-
 class ECPC_ABDCPProcessor(ABDCPProcessor):
 
     xmlmodel_class = ECPC_ABDCP_XML_Message
@@ -27,9 +27,10 @@ class ECPC_ABDCPProcessor(ABDCPProcessor):
         message_type = self.message.message_type
         return Sequence.next(
             message_type + '_message',
-            template='%(OO)s%Y%m%d%NNNNNN', 
+            template='%(OO)s%Y%m%d%(TI)s%NNNNN', 
             params={
-                'OO': settings.LOCAL_OPERATOR_ID
+                'OO': settings.LOCAL_OPERATOR_ID,
+                'TI': self.message.process_type
             }
         )
 
@@ -87,7 +88,7 @@ class ECPC_ABDCPProcessor(ABDCPProcessor):
 
         return self.get_response_error(result_code)
 
-    # Accessing request information
+    # Accessing request information
 
     def get_request_number(self):
         return self.xmlmodel.numeracion
@@ -110,7 +111,6 @@ class ECPC_ABDCPProcessor(ABDCPProcessor):
     def load_number_information(self):
         number = self.get_request_number()
         self.number_info = self.api.get_number(number)
-
     def get_number_information(self):
         return getattr(self, 'number_info', None)
 
@@ -176,4 +176,5 @@ class ECPC_ABDCPProcessor(ABDCPProcessor):
         self.process_response()
         self.save_response()
         self.mark_responded()
+        send_message.delay(self.message.message_id)
 
