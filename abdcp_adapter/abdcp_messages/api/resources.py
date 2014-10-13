@@ -186,41 +186,41 @@ class ABDCPMessageCreation(ControllerResourceView):
                 unicode(strings.JSON_REQUIRED_RESTFUL_API_ERROR)
             ]
             return self.bad_request(error_messages)
-        # Parsing the body
+        #Parsing the body
         if not self.parse_request_body():
             error_messages = [
                 unicode(strings.INVALID_JSON_RESTFUL_API_ERROR)
             ]
             return self.bad_request(error_messages)
-        # Checking document structure
+        #Checking document structure
         if not self.check_request_document_structure():
             error_messages = [
                 unicode(strings.UNEXPECTED_STRUCTURE_RESTFUL_API_ERROR)
             ]
             return self.bad_request(error_messages)
-        # Checking credentials
+        #Checking credentials
         if not self.check_credentials():
             error_messages = [
                 unicode(strings.INVALID_CREDENTIALS_RESTFUL_API_ERROR)
             ]
             return self.forbidden(error_messages)
-        # Validating the XML document structure
+        #Validating the XML document structure
         if not self.check_xml_document():
             error_messages = [
                 unicode(strings.INVALID_XML_DOCUMENT_RESTFUL_API_ERROR)
             ]
             error_messages += self.get_xml_errors()
             return self.bad_request(error_messages)
-        # Check for a duplicated message
+        #Check for a duplicated message
         if self.check_duplicated_message():
             msg = strings.DUPLICATED_MESSAGE_RESTFUL_API_ERROR % {
                 'message_id': self.message_id
             }
             error_messages = [unicode(msg)]
             return self.conflict(error_messages)
-        # Everything seems to be OK, lets create the message
+        #Everything seems to be OK, lets create the message
         if self.create_message():
-            # Message created
+            #Message created
             process_message.delay(self.message_id)
             return self.no_content()
         else:
