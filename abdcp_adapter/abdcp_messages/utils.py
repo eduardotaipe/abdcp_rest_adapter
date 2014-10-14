@@ -16,7 +16,7 @@ from abdcp_messages.xmlmodels import ABDCP_XML_Message
 def abdcp_validate_xml_message(xmlstr):
     xml = xml_from_string(xmlstr)
     xsd = xsd_from_file(abdcp_messages_settings.ABDCP_MESSAGE_XSD_FILEPATH)
-    # Some of the files is not valid XML
+    # Some of the files is not valid XML
     if xml is None or xsd is None:
         return (False, [], )
     # Performing the actual validation
@@ -71,7 +71,7 @@ def beautify_xmlstr(xmlstr):
     """
     from lxml import etree
     root = etree.XML(xmlstr.strip())
-    return etree.tostring(root, pretty_print=True).strip()
+    return etree.tostring(root, pretty_print=True, xml_declaration=True, encoding='UTF-8').strip()
 
 
 def pretty_print_xmlstr(xmlstr):
