@@ -50,10 +50,10 @@ class ABDCPXMLBuilder(BaseXMLBuilder):
         message_head['IdentificadorMensaje'] = message_id
         message_head['Remitente'] = sender_code
         message_head['Destinatario'] = recipient_code
-        message_head['IdentificadorProceso'] = process_id
         message_head['FechaCreacionMensaje'] = self.format_datetime(
             stated_creation
         )
+        message_head['IdentificadorProceso'] = process_id
 
         self.build_payload()
 
