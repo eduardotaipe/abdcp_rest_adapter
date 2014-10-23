@@ -164,10 +164,11 @@ class ECPC_ABDCPProcessor(ABDCPProcessor):
 
     def get_query_debt_amount(self):
         num_info = self.get_number_information()
-        if num_info.customer.debt.amount is not None:
-            return num_info.customer.debt.amount
-        else:
-            return None
+        if hasattr(num_info,'customer'):
+            if hasattr(num_info.customer,'debt'):
+                if hasattr(num_info.customer.debt,'amount'):
+                    return num_info.customer.debt.amount
+        return None
 
     def has_debt(self):
         return self.get_query_debt_amount() is not None
