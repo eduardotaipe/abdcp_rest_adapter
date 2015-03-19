@@ -2,12 +2,11 @@ import logging
 
 from celery import shared_task
 
-from abdcp_messages.models import ABDCPMessage
-from abdcp_processes import ABDCPProcessor
-from abdcp_adapter import settings
-
 @shared_task
 def process_message(message_id):
+    from abdcp_messages.models import ABDCPMessage
+    from abdcp_processes import ABDCPProcessor
+    from abdcp_adapter import settings
     retry = False
     try:
         logging.info("=== Begin ABDCP message process ===")
