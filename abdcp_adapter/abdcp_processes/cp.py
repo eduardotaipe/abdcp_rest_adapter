@@ -57,10 +57,24 @@ class ECPC_ABDCPProcessor(ABDCPProcessor):
             return False
         return number_info.error.code == '1000'
 
+    def query_number_has_errors(self):
+
+        data = self.get_number_information()
+
+        if hasattr(data,"error"):
+            if hasattr(data.error,"code"):
+                if int(data.error.code) in xrange(1000,1005):
+                    return True
+
+        return False
+
     def get_ABDCP_code(self):
         
+        if self.query_number_has_errors():
+            return constants.ABDCP_OC_SUSPEND_SERVICE
+        
         if self.get_number_information() is None:
-            raise Exception("Fatal error: no number info")
+            return constants.ABDCP_OC_SUSPEND_SERVICE
 
         if self.phone_not_owned():
             return constants.ABDCP_OC_PHONE_NOT_OWNED
@@ -109,8 +123,11 @@ class ECPC_ABDCPProcessor(ABDCPProcessor):
     # Accesing number information
 
     def load_number_information(self):
+        
         number = self.get_request_number()
         self.number_info = self.api.get_number(number)
+
+
     def get_number_information(self):
         return getattr(self, 'number_info', None)
 
@@ -127,7 +144,7 @@ class ECPC_ABDCPProcessor(ABDCPProcessor):
 
     def get_query_identity_number(self):
         num_info = self.get_number_information()
-        return num_info.customer.identity_number
+        return num_info.customer.customer_identity.identity_number
 
 
     def get_query_identity_document_type(self):
