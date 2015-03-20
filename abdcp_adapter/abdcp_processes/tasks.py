@@ -23,7 +23,7 @@ def process_message(message_id):
     except ABDCPMessage.DoesNotExist, e:
         result = "message id %s was not found" % message_id
     except Exception, e:
-        result = "Error: processing message %s %s" % (message.message_id,e)
+        result = "Error: processing message %s %s:%s" % (message.message_id,e.__class__.__name__,e)
         retry = True
     
     logging.info(result)
