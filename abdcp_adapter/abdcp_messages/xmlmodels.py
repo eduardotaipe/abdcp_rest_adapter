@@ -186,6 +186,18 @@ class ECPC_ABDCP_XML_Message(ABDCP_XML_Message):
     cliente = xmlmodels.XPathTextField(
         "//CuerpoMensaje/ConsultaPreviaEnvioCedente/Cliente"
     )
+
+# CPAC - Consulta Previa Aceptada por el Cedente
+class CPAC_ABDCP_XML_Message(ABDCP_XML_Message):
+
+    numeracion = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/ConsultaPreviaAceptadaCedente/Numeracion"
+    )
+    
+    observaciones = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/ConsultaPreviaAceptadaCedente/Observaciones"
+    )
+
     
 # ESC - Envio Solicitud Cedente
 class ESC_ABDCP_XML_Message(ABDCP_XML_Message):

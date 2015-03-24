@@ -1,75 +1,84 @@
 # -*- coding: utf-8 -*-
 
-import logging
-
-from django.conf import settings
-
-from abdcp_messages import strings
-from abdcp_messages.models import ABDCPMessage
-from abdcp_messages.xmlmodels import ECPC_ABDCP_XML_Message
-from abdcp_messages.xmlbuilders import CPAC_XMLBuilder,CPOCC_XMLBuilder
-from abdcp_messages import constants
-from abdcp_messages.tasks import send_message
-
-from abdcp_processes import ABDCPProcessor
-
-from requests_portability.client import PortabilityClientError as ClientError
-from requests_portability.client import PortabilityAPIError as APIError
-from requests_portability.client import PortabilityAuthError as AuthError
-
 from sequence_field.models import Sequence
 
-class ECPC_ABDCPProcessor(ABDCPProcessor):
+from abdcp_adapter import settings
+from abdcp_processes import ABDCP_Message
+from abdcp_messages import strings
+from abdcp_messages import constants
+from abdcp_messages.xmlbuilders import CPAC_XMLBuilder,CPOCC_XMLBuilder
+from abdcp_messages.xmlmodels import ECPC_ABDCP_XML_Message, CPAC_ABDCP_XML_Message
+from abdcp_messages.models import ABDCPMessage
+from operators.models import Operator
 
+class ANCP(ABDCP_Message):
+    """asignacion de numero"""
+    pass
+
+class CPARBD(ABDCP_Message):
+    """rechazo de consulta"""
+    pass
+
+class CPPR(ABDCP_Message):
+    """Se concluye con exito la consulta previa"""
+    pass
+
+class CP(ABDCP_Message):
+    """inicio de consulta previa"""
+    def process(self):
+        self.notify_ABDCP()
+
+class CPOCC(ABDCP_Message):
+    """respuesta de rechazo a la CP"""
+    def process(self):
+        self.notify()
+        self.notify_ABDCP()
+
+class CPAC(ABDCP_Message):
+    """respuesta ok de CP"""
+    xmlmodel_class = CPAC_ABDCP_XML_Message
+
+    # Asunto: Solicitud de portabilidad del cliente __________
+    # Se comunica que el cliente ______________ ha solicitado la portabilidad del número de teléfono ________ .
+    # Detalle de la solicitud de portabilidad
+    # Nombre / Razón Social:
+    # Teléfono:
+    # Fecha y Hora de solicitud:
+    # Portador Destino:
+    # Respuesta: (aceptado o rechazado)
+    # Motivo de rechazo:
+
+    def generate_data(self):
+        self.set_api_client()
+        number = self.xmlmodel.numeracion.encode("utf-8")
+        number_info = self.api.get_number(number)
+        customer_name = number_info.customer.customer_name.encode('utf-8')
+        
+        data ={
+            "subject":"Consulta Previa del cliente %s" % customer_name,
+            "process_name":"CPAC - %s" % strings.ABDCP_MESSAGE_TYPE_CPAC,
+            "phone_number":number,
+        }
+
+        data["detail"]= "Se comunica que el cliente %s ha solicitado la portabilidad del número de teléfono %s."% (customer_name,number)
+        return data
+
+
+
+    def process(self):
+        self.notify()
+        self.notify_ABDCP()
+        
+class ECPC(ABDCP_Message):
+    """Consulta previa para el Cedente"""
     xmlmodel_class = ECPC_ABDCP_XML_Message
 
-    def generate_message_id(self):
-        message_type = self.message.message_type
-        return Sequence.next(
-            message_type + '_message',
-            template='%(OO)s%Y%m%d%(TI)s%NNNNN', 
-            params={
-                'OO': settings.LOCAL_OPERATOR_ID,
-                'TI': self.message.process_type
-            }
-        )
+    def __init__(self, message):
+        super(ECPC, self).__init__(message)
+        self.set_api_client()
 
-    def get_response_ok(self):
-        common_data = self.get_header_data()
-        common_data["numeracion"] = self.get_request_number()
-        common_data["observaciones"] = strings.\
-            ABDCP_MESSAGE_PREVIOUS_CONSULT_ACCEPT
 
-        response = CPAC_XMLBuilder(**common_data)
-        return response.as_xml()
-
-    def get_response_error(self,error_code):
-        common_data = self.get_header_data()
-        common_data["causa_objecion"] = error_code
-        common_data["numeracion"] = self.get_request_number()
-
-        response = CPOCC_XMLBuilder(**common_data)
-        return response.as_xml()
-
-    def phone_not_owned(self):
-        number_info = self.get_number_information()
-        if not hasattr(number_info, 'error'):
-            return False
-        return number_info.error.code == '1000'
-
-    def query_number_has_errors(self):
-
-        data = self.get_number_information()
-
-        if hasattr(data,"error"):
-            if hasattr(data.error,"code"):
-                if int(data.error.code) in xrange(1000,1005):
-                    return True
-
-        return False
-
-    def get_ABDCP_code(self):
-        
+    def get_ABDCP_code(self):        
         if self.query_number_has_errors():
             return constants.ABDCP_OC_SUSPEND_SERVICE
         
@@ -93,82 +102,12 @@ class ECPC_ABDCPProcessor(ABDCPProcessor):
 
         return "ok"
 
-    def generate_response(self):
-        self.load_number_information()
-        result_code = self.get_ABDCP_code()
-        
-        if result_code == "ok":
-            return self.get_response_ok()
-
-        return self.get_response_error(result_code)
-
-    # Accessing request information
-
-    def get_request_number(self):
-        return self.xmlmodel.numeracion
-
-
-    def get_request_line_type(self):
-        return self.xmlmodel.tipo_portabilidad
-
-
-    def get_request_identity_number(self):
-        return self.xmlmodel.numero_documento_identidad
-
-    
-    def get_request_mode(self):
-        return self.xmlmodel.tipo_servicio
-
-
-    # Accesing number information
-
-    def load_number_information(self):
-        
-        number = self.get_request_number()
-        self.number_info = self.api.get_number(number)
-
-
-    def get_number_information(self):
-        return getattr(self, 'number_info', None)
-
-
-    def get_query_number(self):
-        num_info = self.get_number_information()
-        return num_info.number
-
-
-    def get_query_line_type(self):
-        num_info = self.get_number_information()
-        return num_info.line_type.line_type_id
-
-
-    def get_query_identity_number(self):
-        num_info = self.get_number_information()
-        return num_info.customer.customer_identity.identity_number
-
-
-    def get_query_identity_document_type(self):
-        num_info = self.get_number_information()
-        return num_info.customer.document_type
-
-
-    def get_query_mode(self):
-        num_info = self.get_number_information()
-        return num_info.mode.mode_id
-
-
-    def get_query_service_status(self):
-        num_info = self.get_number_information()
-        return num_info.service_status
-
-
-    def service_is_suspended(self):
-        service_status = self.get_query_service_status()
-        return service_status == 'SUSPENDIDO'
+    def has_debt(self):
+        return self.get_query_debt_amount() is not None
 
     def valid_type_service(self):
         return self.get_query_line_type() == constants.LINE_TYPE_FIX
-    
+
     def valid_customer_id(self):
         num_info = self.get_number_information()
         if(num_info.customer is None):
@@ -177,7 +116,16 @@ class ECPC_ABDCPProcessor(ABDCPProcessor):
         req_identity_number = self.get_request_identity_number()
         get_identity_number = self.get_query_identity_number()
         return req_identity_number == get_identity_number
+    
+    def phone_not_owned(self):
+        number_info = self.get_number_information()
+        if not hasattr(number_info, 'error'):
+            return False
+        return number_info.error.code == '1000'
 
+    def service_is_suspended(self):
+        service_status = self.get_query_service_status()
+        return service_status == 'SUSPENDIDO'
 
     def get_query_debt_amount(self):
         num_info = self.get_number_information()
@@ -187,12 +135,91 @@ class ECPC_ABDCPProcessor(ABDCPProcessor):
                     return num_info.customer.debt.amount
         return None
 
-    def has_debt(self):
-        return self.get_query_debt_amount() is not None
+    def get_number_information(self):
+        return getattr(self, 'number_info', None)
+
+    def create_message(self):
+        self.load_number_information()
+
+        result = {
+            'message_id' : self.generate_message_id(),
+            'process_id' : self.xmlmodel.transaction_id,
+            'sender_code' : settings.LOCAL_OPERATOR_ID,
+            'recipient_code' : settings.ABDCP_OPERATOR_ID,
+        }
+
+        result_code = self.get_ABDCP_code()
+
+        if result_code == "ok":
+            result["numeracion"] = self.get_request_number()
+            result["observaciones"] = strings.ABDCP_MESSAGE_PREVIOUS_CONSULT_ACCEPT
+            response = CPAC_XMLBuilder(**result)
+            message_type = "CPAC"
+
+        else:
+            result["causa_objecion"] = result_code
+            result["numeracion"] = self.get_request_number()
+            response = CPOCC_XMLBuilder(**result)
+            message_type = "CPOCC"
+
+        message = ABDCPMessage(
+            message_id=result["message_id"],
+            sender=Operator.objects.get(code=result["sender_code"]),
+            recipient=Operator.objects.get(code=result["recipient_code"]),
+            transaction_id=self.message.transaction_id,
+            stated_creation=self.xmlmodel.get_message_creation_date_as_datetime(),
+            message_type=message_type,
+            process_type='05',
+            request_document=response.as_xml()
+        )
+        message.save()
+
+        
+    def get_request_number(self):
+        return self.xmlmodel.numeracion
+
+    def load_number_information(self):        
+        number = self.get_request_number()
+        self.number_info = self.api.get_number(number)
+
+
+    def query_number_has_errors(self):
+        data = self.get_number_information()
+
+        if hasattr(data,"error"):
+            if hasattr(data.error,"code"):
+                if int(data.error.code) in xrange(1000,1005):
+                    return True
+
+        return False
+
+    def get_query_service_status(self):
+        num_info = self.get_number_information()
+        return num_info.service_status
+
+    def get_query_line_type(self):
+        num_info = self.get_number_information()
+        return num_info.line_type.line_type_id
+
+    def get_request_identity_number(self):
+        return self.xmlmodel.numero_documento_identidad
+
+    def get_query_identity_number(self):
+        num_info = self.get_number_information()
+        return num_info.customer.customer_identity.identity_number
+
+
+    def generate_message_id(self):
+        message_type = self.message.message_type
+        return Sequence.next(
+            message_type + '_message',
+            template='%(OO)s%Y%m%d%(TI)s%NNNNN', 
+            params={
+                'OO': settings.LOCAL_OPERATOR_ID,
+                'TI': self.message.process_type
+            }
+        )
 
     def process(self):
-        self.process_response()
-        self.save_response()
-        self.mark_responded()
-        send_message.delay(self.message.message_id)
-
+        response = self.create_message()
+        print "todo: process_message.delay() #encolamos el envio para q lo maneje la clase CPOCC o CPAC"

@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ITP - Proyecto de Portabilidad Num&eacute;rica</title>
+  <title>ITP - Portabilidad Num&eacute;rica</title>
   <style type="text/css">
     #outlook a {padding:0;}
     body{width:100% !important; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; margin:0; padding:0;} 
@@ -60,7 +60,7 @@
    <td colspan="2"><img style="display:block;" name="base_r2_c3" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="80" height="73" id="base_r2_c3" alt="" /></td>
    <td bgcolor="#ffffff">
     <font face="Arial" size="5">
-      <b>Proyecto de</b>
+      <b>&nbsp;</b>
     </font>
     <br />
     <font size="1">&nbsp;</font>
@@ -88,7 +88,7 @@
   <tr>
    <td colspan="6" align="center" bgcolor="#ffffff">
     <font face="Arial" size="5">
-      <b>Proceso ABCDE</b>
+      <b>{{ process_name }}</b>
     </font>
    </td>
    <td><img style="display:block;" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="1" height="34" alt="" /></td>
@@ -100,7 +100,7 @@
   <tr>
    <td colspan="6" align="center" bgcolor="#ffffff">
     <font face="Arial" size="6">
-      <b>01 555 4763</b>
+      <b>{{ phone_number }}</b>
     </font>
    </td>
    <td><img style="display:block;" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="1" height="45" alt="" /></td>
@@ -123,17 +123,27 @@
    <td colspan="5" bgcolor="#eeeeee"></td>
    <td bgcolor="#eeeeee"><img style="display:block;" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="1" height="1" alt="" /></td>
   </tr>
+  <!-- ********************* -->
+  <tr>
+   <td bgcolor="#222222"><img style="display:block;" name="base_r12_c1" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="46" height="67" id="base_r12_c1" alt="" /></td>
+   <td bgcolor="#222222">
+    <font face="Arial" size="2" color="#ffffff">
+    {{ detail }}
+    </font>
+    </td>
+  </tr>
+  {% for key,value in list_data.items %}
   <tr>
    <td bgcolor="#222222"><img style="display:block;" name="base_r12_c1" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="46" height="67" id="base_r12_c1" alt="" /></td>
    <td bgcolor="#222222">
     <font face="Arial" size="4" color="#ffffff">
-      <b>Etiqueta 1</b>
+      <b>{{ key }}</b>
     </font>
    </td>
    <td><img style="display:block;" name="base_r12_c3" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="21" height="67" id="base_r12_c3" alt="" /></td>
    <td colspan="2" bgcolor="#ffffff">
     <font face="Arial" size="3">
-      Valor 1
+      {{ value }}
     </font>
    </td>
    <td><img style="display:block;" name="base_r12_c6" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="46" height="67" id="base_r12_c6" alt="" /></td>
@@ -144,46 +154,9 @@
    <td colspan="5" bgcolor="#eeeeee"></td>
    <td bgcolor="#eeeeee"><img style="display:block;" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="1" height="1" alt="" /></td>
   </tr>
-  <tr>
-   <td bgcolor="#222222"><img style="display:block;" name="base_r13_c1" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="46" height="78" id="base_r13_c1" alt="" /></td>
-   <td bgcolor="#222222">
-    <font face="Arial" size="4" color="#ffffff">
-      <b>Etiqueta 2</b>
-    </font>
-   <td><img style="display:block;" name="base_r13_c3" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="21" height="78" id="base_r13_c3" alt="" /></td>
-   <td colspan="2" bgcolor="#ffffff">
-    <font face="Arial" size="3">
-      Valor 1
-    </font>
-   </td>
-   <td><img style="display:block;" name="base_r13_c6" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="46" height="78" id="base_r13_c6" alt="" /></td>
-   <td><img style="display:block;" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="1" height="78" alt="" /></td>
-  </tr>
-  <tr><!-- linea blanca -->
-   <td bgcolor="#eeeeee"><img style="display:block;" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="1" height="1" alt="" /></td>
-   <td colspan="5" bgcolor="#eeeeee"></td>
-   <td bgcolor="#eeeeee"><img style="display:block;" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="1" height="1" alt="" /></td>
-  </tr>
-  <tr>
-   <td bgcolor="#222222"><img style="display:block;" name="base_r14_c1" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="46" height="71" id="base_r14_c1" alt="" /></td>
-   <td bgcolor="#222222">
-    <font face="Arial" size="4" color="#ffffff">
-      <b>Etiqueta 3</b>
-    </font>
-   <td><img style="display:block;" name="base_r14_c3" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="21" height="71" id="base_r14_c3" alt="" /></td>
-   <td colspan="2" bgcolor="#ffffff">
-    <font face="Arial" size="3">
-      Valor 1
-    </font>
-   </td>
-   <td><img style="display:block;" name="base_r14_c6" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="46" height="71" id="base_r14_c6" alt="" /></td>
-   <td><img style="display:block;" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="1" height="71" alt="" /></td>
-  </tr>
-  <tr><!-- linea blanca -->
-   <td bgcolor="#eeeeee"><img style="display:block;" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="1" height="1" alt="" /></td>
-   <td colspan="5" bgcolor="#eeeeee"></td>
-   <td bgcolor="#eeeeee"><img style="display:block;" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="1" height="1" alt="" /></td>
-  </tr>
+  {% endfor %}
+
+  <!-- ********************* -->
   <tr>
    <td colspan="6"><img style="display:block;" name="base_r15_c1" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="600" height="43" id="base_r15_c1" alt="" /></td>
    <td><img style="display:block;" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="1" height="43" alt="" /></td>
@@ -201,7 +174,7 @@
    <td><img style="display:block;" name="base_r18_c1" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="46" height="85" id="base_r18_c1" alt="" /></td>
    <td colspan="4" bgcolor="#ffffff" style="text-align:justify;">
      <font face="Arial" size="1">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid quo nemo obcaecati dolore assumenda quas excepturi incidunt ipsa. Cupiditate neque quos libero quasi culpa dolores, quae tempore provident explicabo quidem reiciendis temporibus dicta perspiciatis optio nisi molestias. Sapiente ea similique qui quia, earum tempora facilis repellat sint corrupti, culpa explicabo.
+      ABDCP - ITP Integration
     </font>
    </td>
    <td><img style="display:block;" name="base_r18_c6" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="46" height="85" id="base_r18_c6" alt="" /></td>
