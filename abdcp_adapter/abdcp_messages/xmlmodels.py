@@ -198,6 +198,16 @@ class CPAC_ABDCP_XML_Message(ABDCP_XML_Message):
         "//CuerpoMensaje/ConsultaPreviaAceptadaCedente/Observaciones"
     )
 
+# CPOCC - Consulta previa objeción del concesionario cedente
+class CPOCC_ABDCP_XML_Message(ABDCP_XML_Message):
+
+    causa_objecion = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/ConsultaPreviaObjecionConcesionarioCedente/CausaObjecion"
+    )
+    
+    numeracion = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/ConsultaPreviaObjecionConcesionarioCedente/Numeracion"
+    )
     
 # ESC - Envio Solicitud Cedente
 class ESC_ABDCP_XML_Message(ABDCP_XML_Message):

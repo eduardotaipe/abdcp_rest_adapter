@@ -12,6 +12,7 @@ from requests_portability.client import PortabilityAuthError as AuthError
 from abdcp_adapter.utils import load_class
 from abdcp_adapter import settings
 from abdcp_messages import constants
+from abdcp_messages.tasks import send_message
 
 
 class ABDCP_Message(object):
@@ -28,7 +29,7 @@ class ABDCP_Message(object):
     def generate_data(self):
         return {
             "subject":"Mensaje %s" % self.__class__.__name__,
-            "body": "Mensaje %s" % self.__class__.__name__
+            "detail": "Mensaje %s" % self.__class__.__name__
         }
         
     def notify(self):
@@ -39,9 +40,6 @@ class ABDCP_Message(object):
         self.send_mail(data)
 
     def send_mail(self,data):
-        print "sending mail:\ntemplate:%s\npara:%s\nsubject:%s\nbody:\n%s"\
-            %(self.template, self.notify_to, data['subject'],data['detail'])
-
         t = get_template(self.template)
         c=Context(data)
         body = t.render(c)
@@ -50,8 +48,8 @@ class ABDCP_Message(object):
         msg.send()
 
     def notify_ABDCP(self):
-        print "notificamos al abdcp"
-        # request.post("lalala")
+        send_message.delay(self.message.message_id)
+        
 
     def process(self):
         self.notify()

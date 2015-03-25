@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import time
+
 from sequence_field.models import Sequence
 
 from abdcp_adapter import settings
@@ -7,9 +9,10 @@ from abdcp_processes import ABDCP_Message
 from abdcp_messages import strings
 from abdcp_messages import constants
 from abdcp_messages.xmlbuilders import CPAC_XMLBuilder,CPOCC_XMLBuilder
-from abdcp_messages.xmlmodels import ECPC_ABDCP_XML_Message, CPAC_ABDCP_XML_Message
+from abdcp_messages.xmlmodels import ECPC_ABDCP_XML_Message, CPAC_ABDCP_XML_Message, CPOCC_ABDCP_XML_Message
 from abdcp_messages.models import ABDCPMessage
 from operators.models import Operator
+from abdcp_processes.tasks import process_message
 
 class ANCP(ABDCP_Message):
     """asignacion de numero"""
@@ -30,6 +33,31 @@ class CP(ABDCP_Message):
 
 class CPOCC(ABDCP_Message):
     """respuesta de rechazo a la CP"""
+    xmlmodel_class = CPOCC_ABDCP_XML_Message
+
+    def generate_data(self):
+        self.set_api_client()
+        number = self.xmlmodel.numeracion.encode("utf-8")
+        number_info = self.api.get_number(number)
+        customer_name = number_info.customer.customer_name.encode('utf-8')
+        
+        data ={
+            "subject":"Consulta Previa del cliente %s" % customer_name,
+            "process_name":"CPOCC - %s" % strings.ABDCP_MESSAGE_TYPE_CPOCC,
+            "phone_number":number,
+        }
+
+        data["detail"]= "Se comunica el número %s del cliente %s ha sido consultado."% (number,customer_name)
+        data["list_data"]={}
+        data["list_data"]["Nombre/Razon Social"] = customer_name
+        data["list_data"]["Teléfono"] = number
+        data["list_data"]["Fecha y hora de consulta"] = time.strftime("%Y-%m-%d %H:%M:%S")
+        data["list_data"]["Portador destino"] = self.message.recipient.name
+        data["list_data"]["Respuesta"] = "La consulta previa Fallida"
+        data["list_data"]["Motivo de rechazo"] = constants.OBJECTION_CAUSE[self.xmlmodel.causa_objecion]
+        
+        return data
+
     def process(self):
         self.notify()
         self.notify_ABDCP()
@@ -37,16 +65,6 @@ class CPOCC(ABDCP_Message):
 class CPAC(ABDCP_Message):
     """respuesta ok de CP"""
     xmlmodel_class = CPAC_ABDCP_XML_Message
-
-    # Asunto: Solicitud de portabilidad del cliente __________
-    # Se comunica que el cliente ______________ ha solicitado la portabilidad del número de teléfono ________ .
-    # Detalle de la solicitud de portabilidad
-    # Nombre / Razón Social:
-    # Teléfono:
-    # Fecha y Hora de solicitud:
-    # Portador Destino:
-    # Respuesta: (aceptado o rechazado)
-    # Motivo de rechazo:
 
     def generate_data(self):
         self.set_api_client()
@@ -60,14 +78,20 @@ class CPAC(ABDCP_Message):
             "phone_number":number,
         }
 
-        data["detail"]= "Se comunica que el cliente %s ha solicitado la portabilidad del número de teléfono %s."% (customer_name,number)
+        data["detail"]= "Se comunica el número %s del cliente %s ha sido consultado."% (number,customer_name)
+        data["list_data"]={}
+        data["list_data"]["Nombre/Razon Social"] = customer_name
+        data["list_data"]["Teléfono"] = number
+        data["list_data"]["Fecha y hora de consulta"] = time.strftime("%Y-%m-%d %H:%M:%S")
+        data["list_data"]["Portador destino"] = self.message.recipient.name
+        data["list_data"]["Respuesta"] = "La consulta previa exitosa"
         return data
-
-
 
     def process(self):
         self.notify()
         self.notify_ABDCP()
+
+
         
 class ECPC(ABDCP_Message):
     """Consulta previa para el Cedente"""
@@ -163,16 +187,17 @@ class ECPC(ABDCP_Message):
             message_type = "CPOCC"
 
         message = ABDCPMessage(
-            message_id=result["message_id"],
-            sender=Operator.objects.get(code=result["sender_code"]),
-            recipient=Operator.objects.get(code=result["recipient_code"]),
-            transaction_id=self.message.transaction_id,
-            stated_creation=self.xmlmodel.get_message_creation_date_as_datetime(),
-            message_type=message_type,
-            process_type='05',
-            request_document=response.as_xml()
+            message_id = result["message_id"],
+            sender = Operator.objects.get(code=result["sender_code"]),
+            recipient = Operator.objects.get(code=result["recipient_code"]),
+            transaction_id = self.message.transaction_id,
+            stated_creation = self.xmlmodel.get_message_creation_date_as_datetime(),
+            message_type = message_type,
+            process_type = '05',
+            request_document = response.as_xml()
         )
         message.save()
+        return message
 
         
     def get_request_number(self):
@@ -221,5 +246,6 @@ class ECPC(ABDCP_Message):
         )
 
     def process(self):
-        response = self.create_message()
-        print "todo: process_message.delay() #encolamos el envio para q lo maneje la clase CPOCC o CPAC"
+        message = self.create_message()
+        process_message.delay(message.message_id)
+        

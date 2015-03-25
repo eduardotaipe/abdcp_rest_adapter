@@ -32,7 +32,7 @@ def send_message(message_id):
 	payload = {
             "userID" : settings.ABDCP_CLIENT_REST_ADAPTER_USR,
             "password" : base64.b64encode(settings.ABDCP_CLIENT_REST_ADAPTER_PWD),
-            "xmlMsg" : message.response_document,
+            "xmlMsg" : message.request_document,
             "attachedDoc" : None 
         }
 

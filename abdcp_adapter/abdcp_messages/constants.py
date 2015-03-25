@@ -74,6 +74,15 @@ ABDCP_OC_INVALID_ID_CUSTOMER    = 'REC01PRT07'
 ABDCP_OC_INVALID_MODE           = 'REC01PRT08'
 ABDCP_OC_HAS_DEBT               = 'REC01PRT09'
 
+OBJECTION_CAUSE = {}
+OBJECTION_CAUSE[ABDCP_OC_SUSPEND_SERVICE] = "El servicio esta suspendido"
+OBJECTION_CAUSE[ABDCP_OC_PHONE_NOT_OWNED] = "El teléfono no nos pertenece"
+OBJECTION_CAUSE[ABDCP_OC_INVALID_SERVICE_TYPE] = "El Tipo de servicio solicitado no es Fijo"
+OBJECTION_CAUSE[ABDCP_OC_INVALID_ID_CUSTOMER] = "El documento de identidad no corresponde al cliente"
+OBJECTION_CAUSE[ABDCP_OC_INVALID_MODE] = "El modo solicitado no es POSTPAGO"
+OBJECTION_CAUSE[ABDCP_OC_HAS_DEBT] = "El teléfono tiene deudas"
+
+
 ABDCP_MESSAGE_TYPE_ESC = "ESC"
 
 LINE_TYPE_FIX = 1

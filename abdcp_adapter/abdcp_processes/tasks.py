@@ -5,14 +5,14 @@ from celery import shared_task
 @shared_task
 def process_message(message_id):
     from abdcp_messages.models import ABDCPMessage
-    from abdcp_processes import ABDCPProcessor
+    from abdcp_processes import ABDCP_Message
     from abdcp_adapter import settings
     retry = False
     try:
         logging.info("=== Begin ABDCP message process ===")
         message = ABDCPMessage.objects.get(message_id=message_id)
         result = ""
-        processor = ABDCPProcessor.processor_factory(message)
+        processor = ABDCP_Message.processor_factory(message)
         if processor is not None:
             processor.process()
             result = "Message %s (%s) has been processed" % \
