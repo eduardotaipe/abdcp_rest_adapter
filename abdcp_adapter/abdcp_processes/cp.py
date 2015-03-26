@@ -14,6 +14,30 @@ from abdcp_messages.models import ABDCPMessage
 from operators.models import Operator
 from abdcp_processes.tasks import process_message
 
+############################
+# Flujo de consulta previa #
+############################
+# RECIPIENT                             ABDCP                                 DONOR
+#     +                                   +                                     +  
+#     +--------------CP------------------->                                     |  
+#     <-------------[NI]------------------+                                     |  
+#     |                                   |                                     |  
+#     <--------------ANCP-----------------+                                     |  
+#     |                                   |                                     |  
+#     <-------------[CPRABD]-------------------------------ECPC----------------->  
+#     |                                   |                                     |  
+#     |                                   |                                     |  
+#     |                                   <---------------[CPOCC]---------------+  
+#     <-------------[CPRABD]--------------+                                     |  
+#     |                                   |                                     |  
+#     |                                   |                                     |  
+#     |                                   |                                     |  
+#     |                                   <-----------------CPAC----------------+  
+#     <--------------CPPR-----------------+                                     |  
+#     |                                   |                                     |  
+#     +                                   +                                     +  
+
+
 class ANCP(ABDCP_Message):
     """asignacion de numero"""
     pass

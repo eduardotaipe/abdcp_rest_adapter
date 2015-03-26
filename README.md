@@ -1,6 +1,29 @@
 ABDCP REST Adapter
 ==================
 
-Django-powered queue manager processing ABDCP-related information and consuming internal web services.
+
+FLUJO DE CONSULTA PREVIA
+---
+
+    RECIPIENT                             ABDCP                                 DONOR
+        +                                   +                                     +  
+        +--------------CP------------------->                                     |  
+        <-------------[NI]------------------+                                     |  
+        |                                   |                                     |  
+        <--------------ANCP-----------------+                                     |  
+        |                                   |                                     |  
+        <-------------[CPRABD]-------------------------------ECPC----------------->  
+        |                                   |                                     |  
+        |                                   |                                     |  
+        |                                   <---------------[CPOCC]---------------+  
+        <-------------[CPRABD]--------------+                                     |  
+        |                                   |                                     |  
+        |                                   |                                     |  
+        |                                   |                                     |  
+        |                                   <-----------------CPAC----------------+  
+        <--------------CPPR-----------------+                                     |  
+        |                                   |                                     |  
+        +                                   +                                     +  
+
 
 (c) 2014 - Red Científica Peruana
