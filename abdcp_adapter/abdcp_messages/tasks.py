@@ -25,7 +25,7 @@ def send_email(info):
 def send_message(message_id):
     retry = False
     try:
-        logging.info("=== Begin ABDCP message send ===")
+        logging.info("=== Begin ABDCP message send (%s)===" % message_id)
         message = ABDCPMessage.objects.get(message_id=message_id)
         result = ""
 
@@ -44,18 +44,20 @@ def send_message(message_id):
                           }
         )
 
+        print r.text
         if r.status_code == requests.codes.ok:
+
             response = json.loads(r.text)
             
             if "response" in response and response['response'][0:3]=='ERR':
                 result = response['response']
             else:
-                result = "Message %s (%s) has been sended" % \
+                result = "Message %s (%s) has been sent" % \
                     (message.message_id,message.message_type)
             
                 message.mark_delivered()
         else:
-            result = "Message %s (%s) has NOT been sended, only stored\nError: %s"%\
+            result = "Message %s (%s) has NOT been sent, only stored\nError: %s"%\
                 (message.message_id,message.message_type, r.raise_for_status())
     except ABDCPMessage.DoesNotExist, e:
         result = "message id %s was not found" % message_id
@@ -72,6 +74,6 @@ def send_message(message_id):
             countdown=settings.CELERY_COUNTDOWN
         )
 
-    logging.info("=== End ABDCP message sended ===")
+    logging.info("=== End ABDCP message sent ===")
 
     return result 

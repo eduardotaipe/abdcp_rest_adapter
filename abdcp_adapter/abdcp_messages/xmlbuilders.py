@@ -120,7 +120,7 @@ class CPOCC_XMLBuilder(ABDCPXMLBuilder):
     payload_name = 'ConsultaPreviaObjecionConcesionarioCedente'
 
     def __init__(self, **params):
-
+        
         params['message_type'] = 'CPOCC'
 
         super(CPOCC_XMLBuilder, self).__init__(**params)
@@ -138,9 +138,7 @@ class CPOCC_XMLBuilder(ABDCPXMLBuilder):
             payload['Numeracion'] = numeracion
 
             if fecha_vencimiento is not None:
-                payload['FechaVencimiento'] = self.format_date(
-                    fecha_vencimiento
-                )
+                payload['FechaVencimiento'] = fecha_vencimiento
 
             if monto is not None:
                 payload['Monto'] = monto
@@ -167,7 +165,7 @@ class SAC_XMLBuilder(ABDCPXMLBuilder):
 
 class OCC_XMLBuilder(ABDCPXMLBuilder):
 
-    payload_name = 'ConsultaPreviaObjecionConcesionarioCedente'
+    payload_name = 'ObjecionConcesionarioCedente'
 
     def __init__(self, **params):
 
@@ -177,6 +175,9 @@ class OCC_XMLBuilder(ABDCPXMLBuilder):
         
         causa_objecion = params.get('causa_objecion')
         numeracion = params.get('numeracion')
+        fecha_vencimiento = params.get('fecha_vencimiento', None)
+        monto = params.get('monto', None)
+        moneda = params.get('moneda', None)
 
         payload = self.get_payload()
 
@@ -184,3 +185,13 @@ class OCC_XMLBuilder(ABDCPXMLBuilder):
             payload['CausaObjecion'] = causa_objecion
             payload['Numeracion'] = numeracion
 
+            if fecha_vencimiento is not None:
+                payload['FechaVencimiento'] = fecha_vencimiento
+
+            if monto is not None:
+                payload['Monto'] = monto
+
+            if moneda is not None:
+                payload['Moneda'] = moneda
+
+    

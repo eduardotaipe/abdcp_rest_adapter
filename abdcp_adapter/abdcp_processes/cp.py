@@ -6,13 +6,13 @@ from sequence_field.models import Sequence
 
 from abdcp_adapter import settings
 from abdcp_processes import ABDCP_Message
+from abdcp_processes.tasks import process_message
 from abdcp_messages import strings
 from abdcp_messages import constants
 from abdcp_messages.xmlbuilders import CPAC_XMLBuilder,CPOCC_XMLBuilder
 from abdcp_messages.xmlmodels import ECPC_ABDCP_XML_Message, CPAC_ABDCP_XML_Message, CPOCC_ABDCP_XML_Message
 from abdcp_messages.models import ABDCPMessage
 from operators.models import Operator
-from abdcp_processes.tasks import process_message
 
 ############################
 # Flujo de consulta previa #
@@ -54,66 +54,48 @@ class CP(ABDCP_Message):
     """inicio de consulta previa"""
     def process(self):
         self.notify_ABDCP()
-
+    
 class CPOCC(ABDCP_Message):
     """respuesta de rechazo a la CP"""
     xmlmodel_class = CPOCC_ABDCP_XML_Message
 
     def generate_data(self):
-        self.set_api_client()
-        number = self.xmlmodel.numeracion.encode("utf-8")
-        number_info = self.api.get_number(number)
-        customer_name = number_info.customer.customer_name.encode('utf-8')
-        
-        data ={
-            "subject":"Consulta Previa del cliente %s" % customer_name,
-            "process_name":"CPOCC - %s" % strings.ABDCP_MESSAGE_TYPE_CPOCC,
-            "phone_number":number,
-        }
+        data = super(CPOCC, self).generate_data()
+        number = data["number"]
+        customer_name = data["customer_name"]
+        reason = constants.OBJECTION_CAUSE[self.xmlmodel.causa_objecion]
 
         data["detail"]= "Se comunica el número %s del cliente %s ha sido consultado."% (number,customer_name)
-        data["list_data"]={}
-        data["list_data"]["Nombre/Razon Social"] = customer_name
-        data["list_data"]["Teléfono"] = number
+        if "list_data" not in data:
+            data["list_data"]={}
         data["list_data"]["Fecha y hora de consulta"] = time.strftime("%Y-%m-%d %H:%M:%S")
-        data["list_data"]["Portador destino"] = self.message.recipient.name
         data["list_data"]["Respuesta"] = "La consulta previa Fallida"
-        data["list_data"]["Motivo de rechazo"] = constants.OBJECTION_CAUSE[self.xmlmodel.causa_objecion]
-        
+        data["list_data"]["Motivo de rechazo"] = reason
         return data
 
     def process(self):
-        self.notify()
         self.notify_ABDCP()
+        self.notify()
 
 class CPAC(ABDCP_Message):
     """respuesta ok de CP"""
     xmlmodel_class = CPAC_ABDCP_XML_Message
 
     def generate_data(self):
-        self.set_api_client()
-        number = self.xmlmodel.numeracion.encode("utf-8")
-        number_info = self.api.get_number(number)
-        customer_name = number_info.customer.customer_name.encode('utf-8')
-        
-        data ={
-            "subject":"Consulta Previa del cliente %s" % customer_name,
-            "process_name":"CPAC - %s" % strings.ABDCP_MESSAGE_TYPE_CPAC,
-            "phone_number":number,
-        }
+        data = super(CPAC, self).generate_data()
+        number = data["number"]
+        customer_name = data["customer_name"]
 
         data["detail"]= "Se comunica el número %s del cliente %s ha sido consultado."% (number,customer_name)
-        data["list_data"]={}
-        data["list_data"]["Nombre/Razon Social"] = customer_name
-        data["list_data"]["Teléfono"] = number
+        if "list_data" not in data:
+            data["list_data"]={}
         data["list_data"]["Fecha y hora de consulta"] = time.strftime("%Y-%m-%d %H:%M:%S")
-        data["list_data"]["Portador destino"] = self.message.recipient.name
-        data["list_data"]["Respuesta"] = "La consulta previa exitosa"
+        data["list_data"]["Respuesta"] = "La consulta exitosa"
         return data
 
     def process(self):
-        self.notify()
         self.notify_ABDCP()
+        self.notify()
 
 
         
@@ -187,6 +169,7 @@ class ECPC(ABDCP_Message):
         return getattr(self, 'number_info', None)
 
     def create_message(self):
+        
         self.load_number_information()
 
         result = {
@@ -205,6 +188,11 @@ class ECPC(ABDCP_Message):
             message_type = "CPAC"
 
         else:
+            if result_code==constants.ABDCP_OC_HAS_DEBT:
+                result["fecha_vencimiento"] = self.number_info.customer.debt.expiration_date
+                result["monto"] = self.number_info.customer.debt.amount
+                result["moneda"] = self.number_info.customer.debt.money_type
+
             result["causa_objecion"] = result_code
             result["numeracion"] = self.get_request_number()
             response = CPOCC_XMLBuilder(**result)
@@ -247,7 +235,7 @@ class ECPC(ABDCP_Message):
         return num_info.service_status
 
     def get_query_line_type(self):
-        num_info = self.get_number_information()
+        num_info = self.get_number_information()    
         return num_info.line_type.line_type_id
 
     def get_request_identity_number(self):
@@ -272,4 +260,5 @@ class ECPC(ABDCP_Message):
     def process(self):
         message = self.create_message()
         process_message.delay(message.message_id)
+        self.notify()
         

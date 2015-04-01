@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import logging
+
 from django.conf import settings
 from django.core.mail import EmailMessage
 from django.template import Context
@@ -12,8 +14,10 @@ from requests_portability.client import PortabilityAuthError as AuthError
 from abdcp_adapter.utils import load_class
 from abdcp_adapter import settings
 from abdcp_messages import constants
+from abdcp_messages import strings
 from abdcp_messages.tasks import send_message
-
+from abdcp_messages.models import ABDCPMessage
+from operators.models import Operator
 
 class ABDCP_Message(object):
     notify_to = settings.ITP_CONTACT_EMAIL
@@ -25,12 +29,6 @@ class ABDCP_Message(object):
 
     def get_xmlmodel_class(self):
         return getattr(self, 'xmlmodel_class', None)
-
-    def generate_data(self):
-        return {
-            "subject":"Mensaje %s" % self.__class__.__name__,
-            "detail": "Mensaje %s" % self.__class__.__name__
-        }
         
     def notify(self):
         if self.template == None:
@@ -40,6 +38,7 @@ class ABDCP_Message(object):
         self.send_mail(data)
 
     def send_mail(self,data):
+        logging.info("Sending email to %s" % self.notify_to)
         t = get_template(self.template)
         c=Context(data)
         body = t.render(c)
@@ -77,6 +76,71 @@ class ABDCP_Message(object):
             logging.error("Authentication error")
         self.api = None
 
+    def get_deep_number_info(self):
+        process_type = self.message.process_type
+
+        if process_type == '01':
+            message_type = "ESC"
+            
+        elif process_type == '05':
+            message_type = "ECPC"
+        else:
+            raise Exception("Invalid process type %s"%process_type)
+
+        messages = ABDCPMessage.objects.filter(
+            transaction_id= self.message.transaction_id,
+            message_type= message_type
+        )
+
+        if len(messages)==0:
+            raise Exception("We can't find %s message."%message_type)
+
+        obj_messaje = self.processor_factory(messages[0])
+        obj_messaje.load_number_information()
+
+        operator = Operator.objects.get(code=obj_messaje.xmlmodel.codigo_receptor)
+
+        if hasattr(obj_messaje.number_info,"error"):
+            customer_name = "No existe en colca"
+        else:
+            customer_name = obj_messaje.number_info.customer.customer_name.encode('utf-8')
+
+        number=obj_messaje.get_request_number().encode('utf-8')
+        data = {
+            "number":number,
+            "customer_name": customer_name,
+            "recipient": operator.name
+        }
+
+        if self.message.message_type=='PEP':
+            data["detail"] = "Se comunica que se ha programado la fecha de portabilidad del cliente %s con número de teléfono %s , por favor proceder con la desafiliación administrativa y técnica en la fecha correspondiente." % (customer_name,number)
+        elif self.message.message_type=='APDC':
+            data["detail"] = "Se comunica que se ha acreditado la deuda del cliente %s con número de teléfono %s , por favor proceder con la desafiliación administrativa y técnica en la fecha correspondiente." % (customer_name,number)
+        elif process_type == '05':
+            data["detail"] = "Se comunica que el cliente %s ha relizado la consulta previa del número de teléfono %s ." %(customer_name,number)
+        elif process_type == '01':
+            data["detail"] = "Se comunica que el cliente %s ha solicitado la portabilidad del número de teléfono %s ." % (customer_name,number)
+
+        return data
+
+    def generate_data(self):
+        data = self.get_deep_number_info()
+        customer_name = data["customer_name"]
+        number = data["number"]
+        recipient = data["recipient"]
+        customer_name = customer_name.decode('utf-8')
+        number = number.decode('utf-8')
+
+        message_type = getattr(strings,"ABDCP_MESSAGE_TYPE_%s"%self.__class__.__name__)
+        data["subject"] = "%s del cliente %s" % (message_type,customer_name)
+        data["process_name"] = message_type
+        data["phone_number"] = number
+        data["list_data"]={}
+        data["list_data"]["Nombre/Razón Social"] = customer_name
+        data["list_data"]["Teléfono"] = number
+        data["list_data"]["Portador destino"] = recipient
+
+        return data
 
     @classmethod
     def processor_factory(cls,message):

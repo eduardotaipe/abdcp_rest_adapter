@@ -208,6 +208,31 @@ class CPOCC_ABDCP_XML_Message(ABDCP_XML_Message):
     numeracion = xmlmodels.XPathTextField(
         "//CuerpoMensaje/ConsultaPreviaObjecionConcesionarioCedente/Numeracion"
     )
+
+# OCC - Solicitud portabilidad objeción del concesionario cedente
+class OCC_ABDCP_XML_Message(ABDCP_XML_Message):
+
+    causa_objecion = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/ObjecionConcesionarioCedente/CausaObjecion"
+    )
+
+    numeracion = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/ObjecionConcesionarioCedente/Numeracion"
+    )
+
+    fecha_vencimiento = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/ObjecionConcesionarioCedente/FechaVencimiento"
+    )
+
+    monto = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/ObjecionConcesionarioCedente/Monto"
+    )
+
+    moneda = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/ObjecionConcesionarioCedente/Moneda"
+    )
+
+
     
 # ESC - Envio Solicitud Cedente
 class ESC_ABDCP_XML_Message(ABDCP_XML_Message):
@@ -362,3 +387,30 @@ class NE_ABDCP_XML_Message(ABDCP_XML_Message):
     descripcion_codigo_error = xmlmodels.XPathTextField(
         '//CuerpoMensaje/NotificacionError/DescripcionCodigoError'
     )
+
+# CPSPR Solicitud de portabilidad procedente por consulta previa procedente
+class CPSPR_ABDCP_XML_Message(ABDCP_XML_Message):
+
+    fecha_limite_programacion_portabilidad = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/SolicitudProcedenteConsultaPreviaProcedente/FechaLimiteProgramacionPortabilidad"
+    )
+    
+    fecha_limite_ejecucion_portabilidad = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/SolicitudProcedenteConsultaPreviaProcedente/FechaLimiteEjecucionPortabilidad"
+    )
+    
+    fecha_referencia_ABDCP = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/SolicitudProcedenteConsultaPreviaProcedente/FechaReferenciaABDCP"
+    )
+
+    numero_consulta_previa = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/SolicitudProcedenteConsultaPreviaProcedente/NumeroConsultaPrevia"
+    )
+
+# SAC Solicitud aceptada por el cedente'
+class SAC_ABDCP_XML_Message(ABDCP_XML_Message):
+    
+    observaciones = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/SolicitudAceptadaCedente/Observaciones"
+    )
+

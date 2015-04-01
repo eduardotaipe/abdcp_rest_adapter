@@ -1,35 +1,26 @@
 # -*- coding: utf-8 -*-
-from django.conf import settings
+import time
 
+from abdcp_messages.models import ABDCPMessage
+from abdcp_messages.xmlmodels import ESC_ABDCP_XML_Message, CPAC_ABDCP_XML_Message, CPOCC_ABDCP_XML_Message, CPSPR_ABDCP_XML_Message, SAC_ABDCP_XML_Message, PEP_ABDCP_XML_Message, OCC_ABDCP_XML_Message
 from abdcp_messages import strings
-from abdcp_processes import Notifier_ABDCPProcessor
-from abdcp_messages.xmlmodels import SR_ABDCP_XML_Message
+from abdcp_messages import constants
+from abdcp_messages.xmlbuilders import SAC_XMLBuilder,OCC_XMLBuilder
+
+from abdcp_processes import ABDCP_Message
+from abdcp_processes.cp import ECPC,CPAC
+from abdcp_processes import settings
+from abdcp_processes.tasks import process_message
+
+from operators.models import Operator
 
 # solicitud de retorno
-class SR_ABDCPProcessor(Notifier_ABDCPProcessor):
+class SR(ABDCP_Message):
+    """Inicio de retorno de portabilidad"""
+    pass
 
-    xmlmodel_class = SR_ABDCP_XML_Message
+# solicitud de retorno
+class AR(ABDCP_Message):
+    """Retorno de portabilidad Aceptado"""
+    pass
 
-    def get_email_info(self):
-        xmlmodel = self.xmlmodel
-        
-        info = {}
-        info["subject"] = strings.ABDCP_MESSAGE_TYPE_SR +": " +\
-            xmlmodel.numeracion_a_retornar
-        info["to"] = settings.TELEPHONY_OPERATOR_EMAIL
-        info["phone_number"] = xmlmodel.numeracion_a_retornar
-        info["process_name"] = strings.ABDCP_MESSAGE_TYPE_SR
-
-        info["list_data"] = {}
-        info["list_data"]["observaciones"] = xmlmodel.observaciones
-        info["list_data"]["codigo_receptor"] = xmlmodel.codigo_receptor
-        info["list_data"]["codigo_cedente"] = xmlmodel.codigo_cedente
-        info["list_data"]["numeracion_a_retornar"] = xmlmodel.numeracion_a_retornar
-        info["list_data"]["fecha_ejecucion_retorno"] = xmlmodel.fecha_ejecucion_retorno
-        info["list_data"]["motivo_retorno"] = xmlmodel.motivo_retorno
-        info["list_data"]["nombre_contacto"] = xmlmodel.nombre_contacto
-        info["list_data"]["email_contacto"] = xmlmodel.email_contacto
-        info["list_data"]["telefono_contacto"] = xmlmodel.telefono_contacto
-        info["list_data"]["fax_contacto"] = xmlmodel.fax_contacto
-
-        return info
