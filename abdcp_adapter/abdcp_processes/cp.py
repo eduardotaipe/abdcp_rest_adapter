@@ -108,7 +108,8 @@ class ECPC(ABDCP_Message):
         self.set_api_client()
 
 
-    def get_ABDCP_code(self):        
+    def get_ABDCP_code(self):
+
         if self.query_number_has_errors():
             return constants.ABDCP_OC_SUSPEND_SERVICE
         
@@ -121,8 +122,11 @@ class ECPC(ABDCP_Message):
         if self.service_is_suspended():
             return constants.ABDCP_OC_SUSPEND_SERVICE
 
-        if not self.valid_type_service():
+        if not self.valid_service_type():
             return constants.ABDCP_OC_INVALID_SERVICE_TYPE
+        
+        if not self.valid_portability_type():
+            return constants.ABDCP_OC_INVALID_MODE
 
         if not self.valid_customer_id():
             return constants.ABDCP_OC_INVALID_ID_CUSTOMER
@@ -132,11 +136,15 @@ class ECPC(ABDCP_Message):
 
         return "ok"
 
+    def valid_portability_type(self):
+        return self.get_query_mode_name() == self.get_request_portability_type()
+
     def has_debt(self):
         return self.get_query_debt_amount() is not None
 
-    def valid_type_service(self):
-        return self.get_query_line_type() == constants.LINE_TYPE_FIX
+    def valid_service_type(self):
+        result = int(self.get_query_line_type()) == int(self.get_request_service_type())
+        return result
 
     def valid_customer_id(self):
         num_info = self.get_number_information()
@@ -215,6 +223,11 @@ class ECPC(ABDCP_Message):
     def get_request_number(self):
         return self.xmlmodel.numeracion
 
+    def get_request_portability_type(self):
+        if self.xmlmodel.tipo_portabilidad in constants.ABDCP_PORTABILITY_TYPE:
+            return constants.ABDCP_PORTABILITY_TYPE[self.xmlmodel.tipo_portabilidad]
+        return constants.ABDCP_PORTABILITY_TYPE['01']
+
     def load_number_information(self):        
         number = self.get_request_number()
         self.number_info = self.api.get_number(number)
@@ -230,6 +243,11 @@ class ECPC(ABDCP_Message):
 
         return False
 
+    def get_query_mode_name(self):
+        num_info = self.get_number_information()
+        mode_name = num_info.mode.mode_name
+        return mode_name.upper()
+
     def get_query_service_status(self):
         num_info = self.get_number_information()
         return num_info.service_status
@@ -238,13 +256,15 @@ class ECPC(ABDCP_Message):
         num_info = self.get_number_information()    
         return num_info.line_type.line_type_id
 
-    def get_request_identity_number(self):
-        return self.xmlmodel.numero_documento_identidad
-
     def get_query_identity_number(self):
         num_info = self.get_number_information()
         return num_info.customer.customer_identity.identity_number
 
+    def get_request_identity_number(self):
+        return self.xmlmodel.numero_documento_identidad
+
+    def get_request_service_type(self):
+        return self.xmlmodel.tipo_servicio
 
     def generate_message_id(self):
         message_type = self.message.message_type
