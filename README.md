@@ -26,4 +26,13 @@ FLUJO DE CONSULTA PREVIA
         +                                   +                                     +  
 
 
-(c) 2014 - Red Científica Peruana
+GUIA PARA HACER DEBUG
+===
+
+Activar el virtualenv
+    source venv/bin/activate
+
+Ejecutar el archivo debug.py
+    python debug.py
+
+(c) 2014 - Red Científica Peruan
