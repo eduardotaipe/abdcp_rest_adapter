@@ -63,7 +63,7 @@ for process_type, message_types in \
     for mt in message_types:
         ABDCP_MESSAGE_TO_PROCESS_MAP[mt] = process_type
 
-ABDCP_MESSAGE_XSD_FILENAME = 'iconectivSchemaABDCP_04242014.xsd'
+ABDCP_MESSAGE_XSD_FILENAME = 'iconectivSchemaABDCP_01042016.xsd'
 ABDCP_MESSAGE_XSD_DIRPATH = '%(DATA_DIR)s/xsd'
 
 #OBJECTION CAUSE DONNOR

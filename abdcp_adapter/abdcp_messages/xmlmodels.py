@@ -198,6 +198,10 @@ class CPAC_ABDCP_XML_Message(ABDCP_XML_Message):
         "//CuerpoMensaje/ConsultaPreviaAceptadaCedente/Observaciones"
     )
 
+    fecha_activacion = xmlmodels.XPathTextField(
+        "//CuerpoMensaje/ConsultaPreviaAceptadaCedente/FechaActivacion"
+    )
+
 # CPOCC - Consulta previa objeción del concesionario cedente
 class CPOCC_ABDCP_XML_Message(ABDCP_XML_Message):
 
