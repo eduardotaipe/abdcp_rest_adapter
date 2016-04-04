@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import time
+from datetime import timedelta
 
 from sequence_field.models import Sequence
 
@@ -176,6 +177,9 @@ class ECPC(ABDCP_Message):
     def get_number_information(self):
         return getattr(self, 'number_info', None)
 
+    def get_activation_date(self):
+        return self.message.created + timedelta(days=1)
+
     def create_message(self):
         
         self.load_number_information()
@@ -192,7 +196,7 @@ class ECPC(ABDCP_Message):
         if result_code == "ok":
             result["numeracion"] = self.get_request_number()
             result["observaciones"] = strings.ABDCP_MESSAGE_PREVIOUS_CONSULT_ACCEPT
-            result["fecha_activacion"] = self.message.created
+            result["fecha_activacion"] = self.message.get_activation_date()
             response = CPAC_XMLBuilder(**result)
             message_type = "CPAC"
 
