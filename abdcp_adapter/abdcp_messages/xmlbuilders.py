@@ -114,7 +114,7 @@ class CPAC_XMLBuilder(ABDCPXMLBuilder):
         if payload is not None:
             payload['Numeracion'] = numeracion
             payload['Observaciones'] = observaciones
-            payload['FechaActivacion'] = fecha_activacion
+            payload['FechaActivacion'] = self.format_date(fecha_activacion)
 
 
 class CPOCC_XMLBuilder(ABDCPXMLBuilder):
