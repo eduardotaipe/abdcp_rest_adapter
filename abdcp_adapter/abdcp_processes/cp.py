@@ -196,7 +196,7 @@ class ECPC(ABDCP_Message):
         if result_code == "ok":
             result["numeracion"] = self.get_request_number()
             result["observaciones"] = strings.ABDCP_MESSAGE_PREVIOUS_CONSULT_ACCEPT
-            result["fecha_activacion"] = self.message.get_activation_date()
+            result["fecha_activacion"] = self.get_activation_date()
             response = CPAC_XMLBuilder(**result)
             message_type = "CPAC"
 
