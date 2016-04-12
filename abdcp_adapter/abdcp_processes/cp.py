@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import time
-from datetime import timedelta
+import datetime
 
 from sequence_field.models import Sequence
 
@@ -178,7 +178,11 @@ class ECPC(ABDCP_Message):
         return getattr(self, 'number_info', None)
 
     def get_activation_date(self):
-        return self.message.created + timedelta(days=1)
+        num_info = self.get_number_information()
+        if hasattr(num_info,'activation_date'):
+            return datetime.datetime.strptime(num_info.activation_date, "%Y-%m-%d %H:%M:%S").date()
+
+        return self.message.created
 
     def create_message(self):
         
