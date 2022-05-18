@@ -1,18 +1,16 @@
-Django==1.6.5
-MySQL-python==1.2.5
-South==1.0
-argparse==1.2.1
--e git+https://github.com/gnrfan/django-restful.git@a1c35815462eb094d8570707fe18686d8cc2a300#egg=django_restful-master
--e git+https://github.com/gnrfan/django-sequence-field.git@7b5975f26dd33a11b6588a40abfd510c3867115f#egg=django_sequence_field-master
--e git+https://github.com/gnrfan/django-xml.git@e7e1243b9699fd8c43d73da27d4a3f2552c380b4#egg=django_xml-master
--e git+https://github.com/gnrfan/python-easyxsd.git@26b8a25599fce1d9c80de47d6e3f424979ff71b2#egg=easyxsd-master
-lxml==3.3.5
-pyToXml==1.1.0
-python-dateutil==2.2
-pytz==2014.4
-requests==2.3.0
--e git+https://github.com/gnrfan/rfc3339.git@250589f6d9ba4893b826f37ff453e33233b22736#egg=rfc3339-master
-six==1.7.3
-wsgiref==0.1.2
-xmldict==0.4.1
-xmltodict==0.9.0
+amqp==5.1.1
+asgiref==3.5.2
+billiard==3.6.4.0
+celery==5.2.6
+click==8.1.3
+click-didyoumean==0.3.0
+click-plugins==1.1.1
+click-repl==0.2.0
+Django==3.2.13
+kombu==5.2.4
+prompt-toolkit==3.0.29
+pytz==2022.1
+six==1.16.0
+sqlparse==0.4.2
+vine==5.0.0
+wcwidth==0.2.5
