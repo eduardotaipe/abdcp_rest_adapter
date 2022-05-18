@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import logging
+
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import Group
@@ -24,7 +26,9 @@ def user_in_abdcp_group(user):
 
 
 def abdcp_check_credentials(username, password):
+    logging.debug("LOGIN")
     user = authenticate(username=username, password=password)
+    logging.warning(user)
     if user is None:
         return False
     else:
